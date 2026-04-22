@@ -7,6 +7,8 @@
 *.iml
 /.idea/
 /captures/
+hs_err_pid*.log
+replay_pid*.log
 
 app/local.properties
 app/secrets.properties
