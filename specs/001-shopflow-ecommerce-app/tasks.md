@@ -92,7 +92,7 @@ gradient glow, tagline, and "Get Started" button renders correctly on true
 black → tapping "Get Started" navigates forward (to onboarding placeholder)
 → back press does not return to splash.
 
-- [ ] T024 Configure `.gitignore` to exclude AI and local environment folders (e.g., `.agents/`, `.specify/`,`/docs`, `local.properties`, `secrets.properties`). Initialize Git repository, make an initial commit containing ONLY the clean application source code and documentation, add the remote origin (URL provided), and push to the main branch.
+- [x] T024 Configure `.gitignore` to exclude AI and local environment folders (e.g., `.agents/`, `.specify/`,`/docs`, `local.properties`, `secrets.properties`). Initialize Git repository, make an initial commit containing ONLY the clean application source code and documentation, add the remote origin (URL provided), and push to the main branch.
 
 ---
 
