@@ -1,0 +1,14 @@
+.agents/
+.specify/
+/docs/
+/.gradle/
+/build/
+/app/build/
+*.iml
+/.idea/
+/captures/
+
+app/local.properties
+app/secrets.properties
+local.properties
+secrets.properties
