@@ -113,24 +113,24 @@ tokens — zero raw color/dimension literals.
 **Goal**: Room database, DAOs, DataStore, offline-capable repositories.
 **Prerequisites**: Phase 3 complete (T041–T081).
 
-- [ ] T082 [P] Create `app/src/main/java/com/shopflow/app/data/local/entity/WishlistItemEntity.kt` — Room `@Entity` per data-model WishlistItem with `@PrimaryKey(autoGenerate = true)` id
-- [ ] T083 [P] Create `app/src/main/java/com/shopflow/app/data/local/entity/NotificationEntity.kt` — Room `@Entity` per data-model Notification with NotificationType enum
-- [ ] T084 [P] Create `app/src/main/java/com/shopflow/app/data/local/dao/WishlistDao.kt` — `@Dao` interface: `getAll(): Flow<List>`, `insert()`, `deleteByProductId()`, `getCount(): Flow<Int>`, `exists(productId): Flow<Boolean>`
-- [ ] T085 [P] Create `app/src/main/java/com/shopflow/app/data/local/dao/NotificationDao.kt` — `@Dao` interface: `getAll(): Flow<List>`, `insert()`, `markAsRead()`, `getUnreadCount(): Flow<Int>`, `deleteAll()`
-- [ ] T086 Create `app/src/main/java/com/shopflow/app/data/local/ShopFlowDatabase.kt` — `@Database` with WishlistItemEntity and NotificationEntity, version 1, exportSchema false
-- [ ] T087 Update `app/src/main/java/com/shopflow/app/di/DatabaseModule.kt` — replace stubs with real `@Provides` for ShopFlowDatabase (Room.databaseBuilder), WishlistDao, NotificationDao
-- [ ] T088 Create `app/src/main/java/com/shopflow/app/data/local/datastore/PreferencesDataStore.kt` — wrapper class for DataStore<Preferences>: read/write onboarding_completed, theme_mode, language_code, biometric_enabled, push_notifications, email_marketing per data-model UserPreferences
-- [ ] T089 Create `app/src/main/java/com/shopflow/app/data/local/datastore/TokenDataStore.kt` — wrapper for encrypted DataStore: store/retrieve/clear customer access token and expiry timestamp
-- [ ] T090 Update `app/src/main/java/com/shopflow/app/di/DataStoreModule.kt` — replace stubs with `@Provides` for DataStore<Preferences>, PreferencesDataStore, TokenDataStore
-- [ ] T091 [P] Create `app/src/main/java/com/shopflow/app/domain/repository/WishlistRepository.kt` — interface: `getWishlist()`, `addItem()`, `removeItem()`, `isWishlisted()`, `getCount()`
-- [ ] T092 [P] Create `app/src/main/java/com/shopflow/app/domain/repository/NotificationRepository.kt` — interface: `getNotifications()`, `addNotification()`, `markAsRead()`, `getUnreadCount()`
-- [ ] T093 [P] Create `app/src/main/java/com/shopflow/app/domain/repository/PreferencesRepository.kt` — interface: `getPreferences()`, `setTheme()`, `setLanguage()`, `setOnboardingCompleted()`, `setBiometric()`, etc.
-- [ ] T094 Create `app/src/main/java/com/shopflow/app/data/repository/WishlistRepositoryImpl.kt` — implements WishlistRepository using WishlistDao with entity↔domain mapping
-- [ ] T095 [P] Create `app/src/main/java/com/shopflow/app/data/repository/NotificationRepositoryImpl.kt` — implements NotificationRepository using NotificationDao
-- [ ] T096 [P] Create `app/src/main/java/com/shopflow/app/data/repository/PreferencesRepositoryImpl.kt` — implements PreferencesRepository using PreferencesDataStore
-- [ ] T097 Update `app/src/main/java/com/shopflow/app/di/RepositoryModule.kt` — add `@Binds` for WishlistRepository, NotificationRepository, PreferencesRepository
-- [ ] T098 Run `./gradlew assembleDebug` and verify zero errors
-- [ ] T099 Git commit `feat: add local storage layer (Room + DataStore)` and push
+- [x] T082 [P] Create `app/src/main/java/com/shopflow/app/data/local/entity/WishlistItemEntity.kt` — Room `@Entity` per data-model WishlistItem with `@PrimaryKey(autoGenerate = true)` id
+- [x] T083 [P] Create `app/src/main/java/com/shopflow/app/data/local/entity/NotificationEntity.kt` — Room `@Entity` per data-model Notification with NotificationType enum
+- [x] T084 [P] Create `app/src/main/java/com/shopflow/app/data/local/dao/WishlistDao.kt` — `@Dao` interface: `getAll(): Flow<List>`, `insert()`, `deleteByProductId()`, `getCount(): Flow<Int>`, `exists(productId): Flow<Boolean>`
+- [x] T085 [P] Create `app/src/main/java/com/shopflow/app/data/local/dao/NotificationDao.kt` — `@Dao` interface: `getAll(): Flow<List>`, `insert()`, `markAsRead()`, `getUnreadCount(): Flow<Int>`, `deleteAll()`
+- [x] T086 Create `app/src/main/java/com/shopflow/app/data/local/ShopFlowDatabase.kt` — `@Database` with WishlistItemEntity and NotificationEntity, version 1, exportSchema false
+- [x] T087 Update `app/src/main/java/com/shopflow/app/di/DatabaseModule.kt` — replace stubs with real `@Provides` for ShopFlowDatabase (Room.databaseBuilder), WishlistDao, NotificationDao
+- [x] T088 Create `app/src/main/java/com/shopflow/app/data/local/datastore/PreferencesDataStore.kt` — wrapper class for DataStore<Preferences>: read/write onboarding_completed, theme_mode, language_code, biometric_enabled, push_notifications, email_marketing per data-model UserPreferences
+- [x] T089 Create `app/src/main/java/com/shopflow/app/data/local/datastore/TokenDataStore.kt` — wrapper for encrypted DataStore: store/retrieve/clear customer access token and expiry timestamp
+- [x] T090 Update `app/src/main/java/com/shopflow/app/di/DataStoreModule.kt` — replace stubs with `@Provides` for DataStore<Preferences>, PreferencesDataStore, TokenDataStore
+- [x] T091 [P] Create `app/src/main/java/com/shopflow/app/domain/repository/WishlistRepository.kt` — interface: `getWishlist()`, `addItem()`, `removeItem()`, `isWishlisted()`, `getCount()`
+- [x] T092 [P] Create `app/src/main/java/com/shopflow/app/domain/repository/NotificationRepository.kt` — interface: `getNotifications()`, `addNotification()`, `markAsRead()`, `getUnreadCount()`
+- [x] T093 [P] Create `app/src/main/java/com/shopflow/app/domain/repository/PreferencesRepository.kt` — interface: `getPreferences()`, `setTheme()`, `setLanguage()`, `setOnboardingCompleted()`, `setBiometric()`, etc.
+- [x] T094 Create `app/src/main/java/com/shopflow/app/data/repository/WishlistRepositoryImpl.kt` — implements WishlistRepository using WishlistDao with entity↔domain mapping
+- [x] T095 [P] Create `app/src/main/java/com/shopflow/app/data/repository/NotificationRepositoryImpl.kt` — implements NotificationRepository using NotificationDao
+- [x] T096 [P] Create `app/src/main/java/com/shopflow/app/data/repository/PreferencesRepositoryImpl.kt` — implements PreferencesRepository using PreferencesDataStore
+- [x] T097 Update `app/src/main/java/com/shopflow/app/di/RepositoryModule.kt` — add `@Binds` for WishlistRepository, NotificationRepository, PreferencesRepository
+- [x] T098 Run `./gradlew assembleDebug` and verify zero errors
+- [x] T099 Git commit `feat: add local storage layer (Room + DataStore)` and push
 
 ---
 

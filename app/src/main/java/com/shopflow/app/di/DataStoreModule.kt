@@ -2,9 +2,9 @@ package com.shopflow.app.di
 
 import android.content.Context
 import androidx.datastore.core.DataStore
-import androidx.datastore.preferences.core.PreferenceDataStoreFactory
 import androidx.datastore.preferences.core.Preferences
-import androidx.datastore.preferences.preferencesDataStoreFile
+import com.shopflow.app.data.local.datastore.PreferencesDataStore
+import com.shopflow.app.data.local.datastore.TokenDataStore
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -19,9 +19,15 @@ object DataStoreModule {
     @Singleton
     fun providePreferencesDataStore(
         @ApplicationContext context: Context
-    ): DataStore<Preferences> {
-        return PreferenceDataStoreFactory.create {
-            context.preferencesDataStoreFile("shopflow_preferences.preferences_pb")
-        }
+    ): PreferencesDataStore {
+        return PreferencesDataStore(context)
+    }
+
+    @Provides
+    @Singleton
+    fun provideTokenDataStore(
+        @ApplicationContext context: Context
+    ): TokenDataStore {
+        return TokenDataStore(context)
     }
 }
