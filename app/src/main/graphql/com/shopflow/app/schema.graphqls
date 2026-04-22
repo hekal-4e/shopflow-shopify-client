@@ -1,0 +1,284 @@
+schema {
+  query: Query
+  mutation: Mutation
+}
+
+scalar ID
+
+type Query {
+  collections(first: Int!): CollectionConnection!
+  products(first: Int!, query: String, sortKey: ProductSortKeys): ProductConnection!
+  collection(id: ID!): Collection
+  product(id: ID!): Product
+  customer(customerAccessToken: String!): Customer
+}
+
+type Mutation {
+  customerAccessTokenCreate(input: CustomerAccessTokenCreateInput!): CustomerAccessTokenCreatePayload!
+  customerCreate(input: CustomerCreateInput!): CustomerCreatePayload!
+  customerUpdate(customerAccessToken: String!, customer: CustomerUpdateInput!): CustomerUpdatePayload!
+  checkoutCreate(input: CheckoutCreateInput!): CheckoutCreatePayload!
+  customerAccessTokenRenew(customerAccessToken: String!): CustomerAccessTokenRenewPayload!
+}
+
+enum ProductSortKeys {
+  BEST_SELLING
+}
+
+enum FulfillmentStatus {
+  UNFULFILLED
+  PROCESSING
+  SHIPPED
+  DELIVERED
+  CANCELLED
+}
+
+type CollectionConnection {
+  edges: [CollectionEdge!]!
+}
+
+type CollectionEdge {
+  node: Collection!
+}
+
+type ProductConnection {
+  pageInfo: PageInfo!
+  edges: [ProductEdge!]!
+}
+
+type ProductEdge {
+  node: Product!
+}
+
+type ImageConnection {
+  edges: [ImageEdge!]!
+}
+
+type ImageEdge {
+  node: Image!
+}
+
+type ProductVariantConnection {
+  edges: [ProductVariantEdge!]!
+}
+
+type ProductVariantEdge {
+  node: ProductVariant!
+}
+
+type MailingAddressConnection {
+  edges: [MailingAddressEdge!]!
+}
+
+type MailingAddressEdge {
+  node: MailingAddress!
+}
+
+type OrderConnection {
+  pageInfo: PageInfo!
+  edges: [OrderEdge!]!
+}
+
+type OrderEdge {
+  node: Order!
+}
+
+type OrderLineItemConnection {
+  edges: [OrderLineItemEdge!]!
+}
+
+type OrderLineItemEdge {
+  node: OrderLineItem!
+}
+
+type CheckoutLineItemConnection {
+  edges: [CheckoutLineItemEdge!]!
+}
+
+type CheckoutLineItemEdge {
+  node: CheckoutLineItem!
+}
+
+type Collection {
+  id: ID!
+  title: String!
+  description: String
+  handle: String!
+  image: Image
+  products(first: Int!, after: String): ProductConnection!
+}
+
+type Product {
+  id: ID!
+  title: String!
+  description: String!
+  descriptionHtml: String!
+  vendor: String
+  productType: String!
+  availableForSale: Boolean!
+  images(first: Int!): ImageConnection!
+  variants(first: Int!): ProductVariantConnection!
+  priceRange: ProductPriceRange!
+}
+
+type ProductVariant {
+  id: ID!
+  title: String!
+  availableForSale: Boolean!
+  price: MoneyV2!
+  compareAtPrice: MoneyV2
+  selectedOptions: [SelectedOption!]!
+  image: Image
+}
+
+type ProductPriceRange {
+  minVariantPrice: MoneyV2!
+  maxVariantPrice: MoneyV2!
+}
+
+type SelectedOption {
+  name: String!
+  value: String!
+}
+
+type Image {
+  url: String!
+  altText: String
+  width: Int
+  height: Int
+}
+
+type MoneyV2 {
+  amount: String!
+  currencyCode: String!
+}
+
+type PageInfo {
+  hasNextPage: Boolean!
+  endCursor: String
+}
+
+type Customer {
+  id: ID!
+  firstName: String
+  lastName: String
+  email: String!
+  phone: String
+  defaultAddress: MailingAddress
+  addresses(first: Int!): MailingAddressConnection!
+  orders(first: Int!, after: String, sortKey: OrderSortKeys, reverse: Boolean): OrderConnection!
+}
+
+enum OrderSortKeys {
+  PROCESSED_AT
+}
+
+type MailingAddress {
+  id: ID!
+  address1: String
+  address2: String
+  city: String
+  province: String
+  country: String
+  zip: String
+}
+
+type Order {
+  id: ID!
+  orderNumber: Int!
+  name: String!
+  processedAt: String!
+  fulfillmentStatus: FulfillmentStatus
+  totalPrice: MoneyV2!
+  lineItems(first: Int!): OrderLineItemConnection!
+  shippingAddress: MailingAddress
+}
+
+type OrderLineItem {
+  title: String!
+  quantity: Int!
+  variant: ProductVariant
+}
+
+type Checkout {
+  id: ID!
+  webUrl: String!
+  totalPrice: MoneyV2!
+  lineItems(first: Int!): CheckoutLineItemConnection!
+}
+
+type CheckoutLineItem {
+  title: String!
+  quantity: Int!
+  variant: ProductVariant
+}
+
+input CustomerAccessTokenCreateInput {
+  email: String!
+  password: String!
+}
+
+input CustomerCreateInput {
+  firstName: String
+  lastName: String
+  email: String!
+  password: String!
+}
+
+input CustomerUpdateInput {
+  firstName: String
+  lastName: String
+  email: String
+  phone: String
+}
+
+input CheckoutLineItemInput {
+  variantId: ID!
+  quantity: Int!
+}
+
+input CheckoutCreateInput {
+  lineItems: [CheckoutLineItemInput!]!
+}
+
+type CustomerAccessToken {
+  accessToken: String!
+  expiresAt: String!
+}
+
+type UserError {
+  code: String
+  field: [String!]
+  message: String!
+}
+
+type CheckoutUserError {
+  code: String
+  field: [String!]
+  message: String!
+}
+
+type CustomerAccessTokenCreatePayload {
+  customerAccessToken: CustomerAccessToken
+  customerUserErrors: [UserError!]!
+}
+
+type CustomerCreatePayload {
+  customer: Customer
+  customerUserErrors: [UserError!]!
+}
+
+type CustomerUpdatePayload {
+  customer: Customer
+  customerUserErrors: [UserError!]!
+}
+
+type CheckoutCreatePayload {
+  checkout: Checkout
+  checkoutUserErrors: [CheckoutUserError!]!
+}
+
+type CustomerAccessTokenRenewPayload {
+  customerAccessToken: CustomerAccessToken
+  userErrors: [UserError!]!
+}

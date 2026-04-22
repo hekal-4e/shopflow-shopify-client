@@ -71,8 +71,9 @@ room {
 }
 
 apollo {
-    service("shopflow") {
+    service("shopify") {
         packageName.set("com.shopflow.app")
+        schemaFile.set(file("src/main/graphql/com/shopflow/app/schema.graphqls"))
     }
 }
 

@@ -1,0 +1,59 @@
+query FetchFeaturedProducts($first: Int!, $query: String) {
+  products(first: $first, query: $query, sortKey: BEST_SELLING) {
+    edges {
+      node {
+        id
+        title
+        description
+        vendor
+        productType
+        availableForSale
+        images(first: 5) {
+          edges {
+            node {
+              url
+              altText
+              width
+              height
+            }
+          }
+        }
+        variants(first: 10) {
+          edges {
+            node {
+              id
+              title
+              availableForSale
+              price {
+                amount
+                currencyCode
+              }
+              compareAtPrice {
+                amount
+                currencyCode
+              }
+              selectedOptions {
+                name
+                value
+              }
+              image {
+                url
+                altText
+              }
+            }
+          }
+        }
+        priceRange {
+          minVariantPrice {
+            amount
+            currencyCode
+          }
+          maxVariantPrice {
+            amount
+            currencyCode
+          }
+        }
+      }
+    }
+  }
+}

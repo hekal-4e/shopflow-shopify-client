@@ -1,0 +1,18 @@
+query FetchCollections($first: Int!) {
+  collections(first: $first) {
+    edges {
+      node {
+        id
+        title
+        description
+        handle
+        image {
+          url
+          altText
+          width
+          height
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,31 @@
+query FetchCustomerProfile($accessToken: String!) {
+  customer(customerAccessToken: $accessToken) {
+    id
+    firstName
+    lastName
+    email
+    phone
+    defaultAddress {
+      id
+      address1
+      address2
+      city
+      province
+      country
+      zip
+    }
+    addresses(first: 10) {
+      edges {
+        node {
+          id
+          address1
+          address2
+          city
+          province
+          country
+          zip
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,12 @@
+mutation CustomerAccessTokenRenew($accessToken: String!) {
+  customerAccessTokenRenew(customerAccessToken: $accessToken) {
+    customerAccessToken {
+      accessToken
+      expiresAt
+    }
+    userErrors {
+      field
+      message
+    }
+  }
+}
