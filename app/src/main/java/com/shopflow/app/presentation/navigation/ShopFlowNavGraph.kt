@@ -16,8 +16,15 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.shopflow.app.presentation.screens.splash.SplashScreen
+import com.shopflow.app.presentation.screens.auth.AuthViewModel
+import com.shopflow.app.presentation.screens.auth.LoginScreen
+import com.shopflow.app.presentation.screens.auth.RegisterScreen
 import com.shopflow.app.presentation.theme.TextPrimary
 import com.shopflow.app.presentation.theme.TrueBlack
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.LaunchedEffect
 
 @Composable
 fun ShopFlowNavGraph(
@@ -27,6 +34,9 @@ fun ShopFlowNavGraph(
     val navBackStackEntry = navController.currentBackStackEntryAsState().value
     val currentDestination = navBackStackEntry?.destination
     val currentRoute = currentDestination?.route
+
+    val authViewModel: AuthViewModel = hiltViewModel()
+    val isAuthenticated by authViewModel.isAuthenticated.collectAsState()
 
     val bottomNavRoutes = setOf(
         Route.Home.route,
@@ -84,8 +94,30 @@ fun ShopFlowNavGraph(
                 )
             }
             composable(Route.Onboarding.route) { PlaceholderScreen("Onboarding") }
-            composable(Route.Login.route) { PlaceholderScreen("Login") }
-            composable(Route.Register.route) { PlaceholderScreen("Register") }
+            composable(Route.Login.route) { 
+                LoginScreen(
+                    onNavigateToRegister = {
+                        navController.navigate(Route.Register.route)
+                    },
+                    onLoginSuccess = {
+                        navController.navigate(Route.Home.route) {
+                            popUpTo(Route.Login.route) { inclusive = true }
+                        }
+                    }
+                )
+            }
+            composable(Route.Register.route) {
+                RegisterScreen(
+                    onNavigateToLogin = {
+                        navController.popBackStack()
+                    },
+                    onRegisterSuccess = {
+                        navController.navigate(Route.Home.route) {
+                            popUpTo(Route.Register.route) { inclusive = true }
+                        }
+                    }
+                )
+            }
             composable(Route.Home.route) { PlaceholderScreen("Home") }
             composable(Route.Search.route) { PlaceholderScreen("Search") }
             composable(Route.ProductDetail.route) { backStackEntry ->
@@ -94,7 +126,16 @@ fun ShopFlowNavGraph(
                 PlaceholderScreen("Product Detail: $productId")
             }
             composable(Route.Cart.route) { PlaceholderScreen("Cart") }
-            composable(Route.Checkout.route) { PlaceholderScreen("Checkout") }
+            composable(Route.Checkout.route) {
+                LaunchedEffect(isAuthenticated) {
+                    if (!isAuthenticated) {
+                        navController.navigate(Route.Login.route)
+                    }
+                }
+                if (isAuthenticated) {
+                    PlaceholderScreen("Checkout")
+                }
+            }
             composable(Route.OrderConfirmation.route) { backStackEntry ->
                 val orderId =
                     backStackEntry.arguments?.getString(Route.OrderConfirmation.ARG_ORDER_ID).orEmpty()

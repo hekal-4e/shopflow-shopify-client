@@ -141,20 +141,20 @@ tokens — zero raw color/dimension literals.
 
 ### Use Cases
 
-- [ ] T100 [P] [US3] Create `app/src/main/java/com/shopflow/app/domain/usecase/auth/LoginUseCase.kt` — takes email+password, calls AuthRepository.login(), returns ApiResult<Customer>
-- [ ] T101 [P] [US3] Create `app/src/main/java/com/shopflow/app/domain/usecase/auth/RegisterUseCase.kt` — takes name+email+password, calls AuthRepository.register()
-- [ ] T102 [P] [US3] Create `app/src/main/java/com/shopflow/app/domain/usecase/auth/LogoutUseCase.kt` — clears token store, resets auth state
-- [ ] T103 [P] [US3] Create `app/src/main/java/com/shopflow/app/domain/usecase/auth/RefreshTokenUseCase.kt` — renews token if near expiry
-- [ ] T104 [P] [US3] Create `app/src/main/java/com/shopflow/app/domain/usecase/auth/GetAuthStateUseCase.kt` — returns Flow<Boolean> for isAuthenticated
+- [x] T100 [P] [US3] Create `app/src/main/java/com/shopflow/app/domain/usecase/auth/LoginUseCase.kt` — takes email+password, calls AuthRepository.login(), returns ApiResult<Customer>
+- [x] T101 [P] [US3] Create `app/src/main/java/com/shopflow/app/domain/usecase/auth/RegisterUseCase.kt` — takes name+email+password, calls AuthRepository.register()
+- [x] T102 [P] [US3] Create `app/src/main/java/com/shopflow/app/domain/usecase/auth/LogoutUseCase.kt` — clears token store, resets auth state
+- [x] T103 [P] [US3] Create `app/src/main/java/com/shopflow/app/domain/usecase/auth/RefreshTokenUseCase.kt` — renews token if near expiry
+- [x] T104 [P] [US3] Create `app/src/main/java/com/shopflow/app/domain/usecase/auth/GetAuthStateUseCase.kt` — returns Flow<Boolean> for isAuthenticated
 
 ### ViewModel & Screens
 
-- [ ] T105 [US3] Create `app/src/main/java/com/shopflow/app/presentation/screens/auth/AuthViewModel.kt` — `@HiltViewModel` with LoginUiState/RegisterUiState sealed classes, email/password validation, login()/register() functions emitting StateFlow, error handling via SharedFlow
-- [ ] T106 [US3] Create `app/src/main/java/com/shopflow/app/presentation/screens/auth/LoginScreen.kt` — per spec Screen 06: magenta glow background, ShopFlow icon, "Welcome back" title, EMAIL/PASSWORD fields (dark surface inputs, icons), "Forgot Password?" link, "Sign In →" GradientButton, "OR" divider, Google+Apple social buttons, footer "Sign up" link
-- [ ] T107 [US3] Create `app/src/main/java/com/shopflow/app/presentation/screens/auth/RegisterScreen.kt` — per spec Screen 07: "Create account" title, FULL NAME/EMAIL/PASSWORD fields, password strength badge (green pill), terms checkbox (magenta), "Create Account →" GradientButton, social buttons (vertical), footer "Sign in" link
-- [ ] T108 [US3] Update `app/src/main/java/com/shopflow/app/presentation/navigation/ShopFlowNavGraph.kt` — replace Login/Register placeholders with real screens, wire AuthViewModel, add auth-gate logic (redirect to Login if unauthenticated on checkout)
-- [ ] T109 Run `./gradlew assembleDebug` and verify zero errors
-- [ ] T110 Git commit `feat: add authentication flow (login, register, social)` and push
+- [x] T105 [US3] Create `app/src/main/java/com/shopflow/app/presentation/screens/auth/AuthViewModel.kt` — `@HiltViewModel` with LoginUiState/RegisterUiState sealed classes, email/password validation, login()/register() functions emitting StateFlow, error handling via SharedFlow
+- [x] T106 [US3] Create `app/src/main/java/com/shopflow/app/presentation/screens/auth/LoginScreen.kt` — per spec Screen 06: magenta glow background, ShopFlow icon, "Welcome back" title, EMAIL/PASSWORD fields (dark surface inputs, icons), "Forgot Password?" link, "Sign In →" GradientButton, "OR" divider, Google+Apple social buttons, footer "Sign up" link
+- [x] T107 [US3] Create `app/src/main/java/com/shopflow/app/presentation/screens/auth/RegisterScreen.kt` — per spec Screen 07: "Create account" title, FULL NAME/EMAIL/PASSWORD fields, password strength badge (green pill), terms checkbox (magenta), "Create Account →" GradientButton, social buttons (vertical), footer "Sign in" link
+- [x] T108 [US3] Update `app/src/main/java/com/shopflow/app/presentation/navigation/ShopFlowNavGraph.kt` — replace Login/Register placeholders with real screens, wire AuthViewModel, add auth-gate logic (redirect to Login if unauthenticated on checkout)
+- [x] T109 Run `./gradlew assembleDebug` and verify zero errors
+- [x] T110 Git commit `feat: add authentication flow (login, register, social)` and push
 
 ---
 
