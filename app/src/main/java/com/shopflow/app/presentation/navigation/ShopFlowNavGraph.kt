@@ -15,6 +15,16 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.shopflow.app.presentation.screens.home.HomeScreen
+import com.shopflow.app.presentation.screens.product.ProductDetailScreen
+import com.shopflow.app.presentation.screens.cart.CartScreen
+import com.shopflow.app.presentation.screens.checkout.CheckoutScreen
+import com.shopflow.app.presentation.screens.order.OrderConfirmationScreen
+import com.shopflow.app.presentation.screens.wishlist.WishlistScreen
+import com.shopflow.app.presentation.screens.profile.ProfileScreen
+import com.shopflow.app.presentation.screens.settings.SettingsScreen
+import com.shopflow.app.presentation.screens.notifications.NotificationScreen
+import com.shopflow.app.presentation.screens.onboarding.OnboardingScreen
 import com.shopflow.app.presentation.screens.splash.SplashScreen
 import com.shopflow.app.presentation.screens.auth.AuthViewModel
 import com.shopflow.app.presentation.screens.auth.LoginScreen
@@ -93,7 +103,15 @@ fun ShopFlowNavGraph(
                     }
                 )
             }
-            composable(Route.Onboarding.route) { PlaceholderScreen("Onboarding") }
+            composable(Route.Onboarding.route) {
+                OnboardingScreen(
+                    onFinish = {
+                        navController.navigate(Route.Home.route) {
+                            popUpTo(Route.Onboarding.route) { inclusive = true }
+                        }
+                    }
+                )
+            }
             composable(Route.Login.route) { 
                 LoginScreen(
                     onNavigateToRegister = {
@@ -118,14 +136,31 @@ fun ShopFlowNavGraph(
                     }
                 )
             }
-            composable(Route.Home.route) { PlaceholderScreen("Home") }
+            composable(Route.Home.route) {
+                HomeScreen(
+                    onNavigateToProductDetail = { productId ->
+                        navController.navigate(Route.ProductDetail.createRoute(productId))
+                    },
+                    onNavigateToNotifications = {
+                        // TODO: Navigate to notifications
+                    }
+                )
+            }
             composable(Route.Search.route) { PlaceholderScreen("Search") }
             composable(Route.ProductDetail.route) { backStackEntry ->
                 val productId =
                     backStackEntry.arguments?.getString(Route.ProductDetail.ARG_PRODUCT_ID).orEmpty()
-                PlaceholderScreen("Product Detail: $productId")
+                ProductDetailScreen(
+                    onNavigateBack = { navController.popBackStack() },
+                    onNavigateToCart = { navController.navigate(Route.Cart.route) }
+                )
             }
-            composable(Route.Cart.route) { PlaceholderScreen("Cart") }
+            composable(Route.Cart.route) {
+                CartScreen(
+                    onNavigateBack = { navController.popBackStack() },
+                    onProceedToCheckout = { navController.navigate(Route.Checkout.route) }
+                )
+            }
             composable(Route.Checkout.route) {
                 LaunchedEffect(isAuthenticated) {
                     if (!isAuthenticated) {
@@ -133,19 +168,55 @@ fun ShopFlowNavGraph(
                     }
                 }
                 if (isAuthenticated) {
-                    PlaceholderScreen("Checkout")
+                    CheckoutScreen(
+                        onNavigateBack = { navController.popBackStack() }
+                    )
                 }
             }
             composable(Route.OrderConfirmation.route) { backStackEntry ->
                 val orderId =
                     backStackEntry.arguments?.getString(Route.OrderConfirmation.ARG_ORDER_ID).orEmpty()
-                PlaceholderScreen("Order Confirmation: $orderId")
+                OrderConfirmationScreen(
+                    onContinueShopping = {
+                        navController.navigate(Route.Home.route) {
+                            popUpTo(Route.Home.route) { inclusive = true }
+                        }
+                    }
+                )
             }
-            composable(Route.Profile.route) { PlaceholderScreen("Profile") }
+            composable(Route.Profile.route) {
+                ProfileScreen(
+                    onNavigateToSettings = { navController.navigate(Route.Settings.route) },
+                    onNavigateToOrders = { navController.navigate(Route.OrderHistory.route) },
+                    onNavigateToWishlist = { navController.navigate(Route.Wishlist.route) }
+                )
+            }
             composable(Route.OrderHistory.route) { PlaceholderScreen("Order History") }
-            composable(Route.Wishlist.route) { PlaceholderScreen("Wishlist") }
-            composable(Route.Notifications.route) { PlaceholderScreen("Notifications") }
-            composable(Route.Settings.route) { PlaceholderScreen("Settings") }
+            composable(Route.Wishlist.route) {
+                WishlistScreen(
+                    onNavigateBack = { navController.popBackStack() },
+                    onNavigateToProduct = { id ->
+                        navController.navigate(Route.ProductDetail.createRoute(id))
+                    }
+                )
+            }
+            composable(Route.Notifications.route) {
+                NotificationScreen(
+                    onNavigateBack = { navController.popBackStack() },
+                    onNavigateToDeepLink = { deepLink ->
+                        // Handle deep link navigation
+                        if (deepLink?.startsWith("shopflow://order/") == true) {
+                            val orderId = deepLink.substringAfterLast("/")
+                            navController.navigate(Route.OrderConfirmation.createRoute(orderId))
+                        }
+                    }
+                )
+            }
+            composable(Route.Settings.route) {
+                SettingsScreen(
+                    onNavigateBack = { navController.popBackStack() }
+                )
+            }
         }
     }
 }

@@ -45,26 +45,25 @@ import com.shopflow.app.presentation.theme.TextSecondary
 import com.shopflow.app.presentation.theme.TrueBlack
 import kotlinx.coroutines.delay
 
-private const val PREFS_NAME = "shopflow_splash_prefs"
-private const val KEY_HAS_OPENED_BEFORE = "has_opened_before"
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.hilt.navigation.compose.hiltViewModel
+import com.shopflow.app.presentation.screens.onboarding.OnboardingViewModel
 
 @Composable
 fun SplashScreen(
     onGetStarted: () -> Unit,
     onSignIn: () -> Unit,
-    onAutoNavigateHome: () -> Unit
+    onAutoNavigateHome: () -> Unit,
+    viewModel: OnboardingViewModel = hiltViewModel()
 ) {
     val context = LocalContext.current
+    val hasCompletedOnboarding by viewModel.hasCompletedOnboarding.collectAsState()
 
-    LaunchedEffect(Unit) {
-        val prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
-        val hasOpenedBefore = prefs.getBoolean(KEY_HAS_OPENED_BEFORE, false)
-
-        if (hasOpenedBefore) {
+    LaunchedEffect(hasCompletedOnboarding) {
+        if (hasCompletedOnboarding) {
             delay(2500)
             onAutoNavigateHome()
-        } else {
-            prefs.edit().putBoolean(KEY_HAS_OPENED_BEFORE, true).apply()
         }
     }
 
@@ -229,6 +228,8 @@ private fun SplashScreenPreview() {
             onGetStarted = {},
             onSignIn = {},
             onAutoNavigateHome = {}
+            // Note: In preview hiltViewModel() will throw if not provided with a mock, 
+            // but for simplicity we'll just ignore preview injection errors here or you can provide a mock.
         )
     }
 }

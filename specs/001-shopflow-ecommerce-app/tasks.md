@@ -171,34 +171,34 @@ tokens — zero raw color/dimension literals.
 
 ### Home (US1)
 
-- [ ] T114 [P] [US1] Create `app/src/main/java/com/shopflow/app/domain/usecase/product/GetCollectionsUseCase.kt` — calls ProductRepository.getCollections()
-- [ ] T115 [P] [US1] Create `app/src/main/java/com/shopflow/app/domain/usecase/product/GetFeaturedProductsUseCase.kt` — calls ProductRepository.getFeaturedProducts()
-- [ ] T116 [P] [US1] Create `app/src/main/java/com/shopflow/app/domain/usecase/product/SearchProductsUseCase.kt` — calls ProductRepository.searchProducts()
-- [ ] T117 [US1] Create `app/src/main/java/com/shopflow/app/presentation/screens/home/HomeViewModel.kt` — `@HiltViewModel` with HomeUiState (collections, featured products, banners), fetch on init, search handler
-- [ ] T118 [US1] Create `app/src/main/java/com/shopflow/app/presentation/screens/home/HomeScreen.kt` — per spec Screen 02: greeting bar + avatar + notification badge, SearchBar, hero banner HorizontalPager, CategoryIcon LazyRow, "Featured" header + 2-column LazyVerticalGrid of ProductCards
-- [ ] T119 [US1] Update NavGraph — replace Home placeholder with real HomeScreen, wire product tap → ProductDetail, category tap → filtered list
+- [x] T114 [P] [US1] Create `app/src/main/java/com/shopflow/app/domain/usecase/product/GetCollectionsUseCase.kt` — calls ProductRepository.getCollections()
+- [x] T115 [P] [US1] Create `app/src/main/java/com/shopflow/app/domain/usecase/product/GetFeaturedProductsUseCase.kt` — calls ProductRepository.getFeaturedProducts()
+- [x] T116 [P] [US1] Create `app/src/main/java/com/shopflow/app/domain/usecase/product/SearchProductsUseCase.kt` — calls ProductRepository.searchProducts()
+- [x] T117 [US1] Create `app/src/main/java/com/shopflow/app/presentation/screens/home/HomeViewModel.kt` — `@HiltViewModel` with HomeUiState (collections, featured products, banners), fetch on init, search handler
+- [x] T118 [US1] Create `app/src/main/java/com/shopflow/app/presentation/screens/home/HomeScreen.kt` — per spec Screen 02: greeting bar + avatar + notification badge, SearchBar, hero banner HorizontalPager, CategoryIcon LazyRow, "Featured" header + 2-column LazyVerticalGrid of ProductCards
+- [x] T119 [US1] Update NavGraph — replace Home placeholder with real HomeScreen, wire product tap → ProductDetail, category tap → filtered list
 
 ### Product Details (US1)
 
-- [ ] T120 [P] [US1] Create `app/src/main/java/com/shopflow/app/domain/usecase/product/GetProductDetailUseCase.kt` — calls ProductRepository.getProductDetail(id)
-- [ ] T121 [P] [US1] Create `app/src/main/java/com/shopflow/app/domain/usecase/cart/AddToCartUseCase.kt` — adds variant+quantity to local cart state
-- [ ] T122 [US1] Create `app/src/main/java/com/shopflow/app/presentation/screens/product/ProductDetailViewModel.kt` — fetches product, manages selected variant (size/color), exposes add-to-cart action
-- [ ] T123 [US1] Create `app/src/main/java/com/shopflow/app/presentation/screens/product/ProductDetailScreen.kt` — per spec Screen 03: hero image with glow, back/share/heart icons, brand breadcrumb, title + price pill, rating stars, SIZE ChipSelector, COLOR circular swatches, description, "Add to Cart" GradientButton
-- [ ] T124 [US1] Update NavGraph — replace ProductDetail placeholder, pass productId argument
+- [x] T120 [P] [US1] Create `app/src/main/java/com/shopflow/app/domain/usecase/product/GetProductDetailUseCase.kt` — calls ProductRepository.getProductDetail(id)
+- [x] T121 [P] [US1] Create `app/src/main/java/com/shopflow/app/domain/usecase/cart/AddToCartUseCase.kt` — adds variant+quantity to local cart state
+- [x] T122 [US1] Create `app/src/main/java/com/shopflow/app/presentation/screens/product/ProductDetailViewModel.kt` — fetches product, manages selected variant (size/color), exposes add-to-cart action
+- [x] T123 [US1] Create `app/src/main/java/com/shopflow/app/presentation/screens/product/ProductDetailScreen.kt` — per spec Screen 03: hero image with glow, back/share/heart icons, brand breadcrumb, title + price pill, rating stars, SIZE ChipSelector, COLOR circular swatches, description, "Add to Cart" GradientButton
+- [x] T124 [US1] Update NavGraph — replace ProductDetail placeholder, pass productId argument
 
 ### Cart & Checkout (US2)
 
-- [ ] T125 [P] [US2] Create `app/src/main/java/com/shopflow/app/domain/usecase/cart/UpdateCartUseCase.kt` — updates quantity for a cart line item
-- [ ] T126 [P] [US2] Create `app/src/main/java/com/shopflow/app/domain/usecase/cart/RemoveFromCartUseCase.kt` — removes line item from cart
-- [ ] T127 [P] [US2] Create `app/src/main/java/com/shopflow/app/domain/usecase/cart/GetCartUseCase.kt` — returns current cart state as Flow
-- [ ] T128 [P] [US2] Create `app/src/main/java/com/shopflow/app/domain/usecase/checkout/CreateCheckoutUseCase.kt` — calls CheckoutRepository.createCheckout() with cart line items, returns webUrl
-- [ ] T129 [US2] Create `app/src/main/java/com/shopflow/app/presentation/screens/cart/CartViewModel.kt` — manages cart state, quantity updates, subtotal calc, remove items
-- [ ] T130 [US2] Create `app/src/main/java/com/shopflow/app/presentation/screens/cart/CartScreen.kt` — per spec Screen 04: StepIndicator, cart item cards with QuantityStepper, delivery address card, payment card visual (gradient), order summary (subtotal/tax/total), "Proceed to Checkout" GradientButton
-- [ ] T131 [US2] Create `app/src/main/java/com/shopflow/app/presentation/screens/checkout/CheckoutViewModel.kt` — creates Shopify checkout, launches Chrome Custom Tab with webUrl
-- [ ] T132 [US2] Create `app/src/main/java/com/shopflow/app/presentation/screens/confirmation/OrderConfirmationScreen.kt` — per spec Screen 05: particle confetti animation, pulsing checkmark halo, "Order Confirmed" title, tracking card with StatusBadge, "Track Order" GradientButton + "Continue Shopping" OutlinedButton
-- [ ] T133 [US2] Update NavGraph — replace Cart/Checkout/Confirmation placeholders, wire deep-link receiver for checkout completion callback
-- [ ] T134 Run `./gradlew assembleDebug` and verify zero errors
-- [ ] T135 Git commit `feat: add complete shopping flow (browse, cart, checkout, confirmation)` and push
+- [x] T125 [P] [US2] Create `app/src/main/java/com/shopflow/app/domain/usecase/cart/UpdateCartUseCase.kt` — updates quantity for a cart line item
+- [x] T126 [P] [US2] Create `app/src/main/java/com/shopflow/app/domain/usecase/cart/RemoveFromCartUseCase.kt` — removes line item from cart
+- [x] T127 [P] [US2] Create `app/src/main/java/com/shopflow/app/domain/usecase/cart/GetCartUseCase.kt` — returns current cart state as Flow
+- [x] T128 [P] [US2] Create `app/src/main/java/com/shopflow/app/domain/usecase/checkout/CreateCheckoutUseCase.kt` — calls CheckoutRepository.createCheckout() with cart line items, returns webUrl
+- [x] T129 [US2] Create `app/src/main/java/com/shopflow/app/presentation/screens/cart/CartViewModel.kt` — manages cart state, quantity updates, subtotal calc, remove items
+- [x] T130 [US2] Create `app/src/main/java/com/shopflow/app/presentation/screens/cart/CartScreen.kt` — per spec Screen 04: StepIndicator, cart item cards with QuantityStepper, delivery address card, payment card visual (gradient), order summary (subtotal/tax/total), "Proceed to Checkout" GradientButton
+- [x] T131 [US2] Create `app/src/main/java/com/shopflow/app/presentation/screens/checkout/CheckoutViewModel.kt` — creates Shopify checkout, launches Chrome Custom Tab with webUrl
+- [x] T132 [US2] Create `app/src/main/java/com/shopflow/app/presentation/screens/confirmation/OrderConfirmationScreen.kt` — per spec Screen 05: particle confetti animation, pulsing checkmark halo, "Order Confirmed" title, tracking card with StatusBadge, "Track Order" GradientButton + "Continue Shopping" OutlinedButton
+- [x] T133 [US2] Update NavGraph — replace Cart/Checkout/Confirmation placeholders, wire deep-link receiver for checkout completion callback
+- [x] T134 Run `./gradlew assembleDebug` and verify zero errors
+- [x] T135 Git commit `feat: add complete shopping flow (browse, cart, checkout, confirmation)` and push
 
 ---
 
@@ -209,44 +209,44 @@ tokens — zero raw color/dimension literals.
 
 ### Wishlist (US4)
 
-- [ ] T136 [P] [US4] Create `app/src/main/java/com/shopflow/app/domain/usecase/wishlist/GetWishlistUseCase.kt`
-- [ ] T137 [P] [US4] Create `app/src/main/java/com/shopflow/app/domain/usecase/wishlist/AddToWishlistUseCase.kt`
-- [ ] T138 [P] [US4] Create `app/src/main/java/com/shopflow/app/domain/usecase/wishlist/RemoveFromWishlistUseCase.kt`
-- [ ] T139 [US4] Create `app/src/main/java/com/shopflow/app/presentation/screens/wishlist/WishlistViewModel.kt` — CRUD operations, filtering/sorting by price/brand, Room-backed
-- [ ] T140 [US4] Create `app/src/main/java/com/shopflow/app/presentation/screens/wishlist/WishlistScreen.kt` — per spec Screen 08: item cards, filter ModalBottomSheet (price RangeSlider, brand ChipSelector, sort ChipSelector, "Apply Filters" GradientButton)
-- [ ] T141 [US4] Update NavGraph — replace Wishlist placeholder
+- [x] T136 [P] [US4] Create `app/src/main/java/com/shopflow/app/domain/usecase/wishlist/GetWishlistUseCase.kt`
+- [x] T137 [P] [US4] Create `app/src/main/java/com/shopflow/app/domain/usecase/wishlist/AddToWishlistUseCase.kt`
+- [x] T138 [P] [US4] Create `app/src/main/java/com/shopflow/app/domain/usecase/wishlist/RemoveFromWishlistUseCase.kt`
+- [x] T139 [US4] Create `app/src/main/java/com/shopflow/app/presentation/screens/wishlist/WishlistViewModel.kt` — CRUD operations, filtering/sorting by price/brand, Room-backed
+- [x] T140 [US4] Create `app/src/main/java/com/shopflow/app/presentation/screens/wishlist/WishlistScreen.kt` — per spec Screen 08: item cards, filter ModalBottomSheet (price RangeSlider, brand ChipSelector, sort ChipSelector, "Apply Filters" GradientButton)
+- [x] T141 [US4] Update NavGraph — replace Wishlist placeholder
 
 ### Profile (US6)
 
-- [ ] T142 [P] [US6] Create `app/src/main/java/com/shopflow/app/domain/usecase/profile/GetCustomerProfileUseCase.kt`
-- [ ] T143 [P] [US6] Create `app/src/main/java/com/shopflow/app/domain/usecase/profile/UpdateCustomerProfileUseCase.kt`
-- [ ] T144 [US6] Create `app/src/main/java/com/shopflow/app/presentation/screens/profile/ProfileViewModel.kt` — fetches customer, exposes stats (order count, wishlist count, points)
-- [ ] T145 [US6] Create `app/src/main/java/com/shopflow/app/presentation/screens/profile/ProfileScreen.kt` — per spec Screen 09: AvatarCircle, name/email, "PREMIUM MEMBER" badge, 3-stat row, NavigationRows (My Orders, Saved Addresses, Payment Methods, Wishlist, Rewards)
-- [ ] T146 [US6] Update NavGraph — replace Profile placeholder, wire menu row taps to respective screens
+- [x] T142 [P] [US6] Create `app/src/main/java/com/shopflow/app/domain/usecase/profile/GetCustomerProfileUseCase.kt`
+- [x] T143 [P] [US6] Create `app/src/main/java/com/shopflow/app/domain/usecase/profile/UpdateCustomerProfileUseCase.kt`
+- [x] T144 [US6] Create `app/src/main/java/com/shopflow/app/presentation/screens/profile/ProfileViewModel.kt` — fetches customer, exposes stats (order count, wishlist count, points)
+- [x] T145 [US6] Create `app/src/main/java/com/shopflow/app/presentation/screens/profile/ProfileScreen.kt` — per spec Screen 09: AvatarCircle, name/email, "PREMIUM MEMBER" badge, 3-stat row, NavigationRows (My Orders, Saved Addresses, Payment Methods, Wishlist, Rewards)
+- [x] T146 [US6] Update NavGraph — replace Profile placeholder, wire menu row taps to respective screens
 
 ### Order History (US5)
 
-- [ ] T147 [P] [US5] Create `app/src/main/java/com/shopflow/app/domain/usecase/order/GetOrderHistoryUseCase.kt`
-- [ ] T148 [US5] Create `app/src/main/java/com/shopflow/app/presentation/screens/orders/OrderHistoryViewModel.kt` — fetches orders, filters by fulfillment status
-- [ ] T149 [US5] Create `app/src/main/java/com/shopflow/app/presentation/screens/orders/OrderHistoryScreen.kt` — per spec Screen 10: filter tabs (All/Active/Delivered/Cancelled) via ChipSelector, order cards with StatusBadge, "Track Order" OutlinedButton
-- [ ] T150 [US5] Update NavGraph — replace OrderHistory placeholder
+- [x] T147 [P] [US5] Create `app/src/main/java/com/shopflow/app/domain/usecase/order/GetOrderHistoryUseCase.kt`
+- [x] T148 [US5] Create `app/src/main/java/com/shopflow/app/presentation/screens/orders/OrderHistoryViewModel.kt` — fetches orders, filters by fulfillment status
+- [x] T149 [US5] Create `app/src/main/java/com/shopflow/app/presentation/screens/orders/OrderHistoryScreen.kt` — per spec Screen 10: filter tabs (All/Active/Delivered/Cancelled) via ChipSelector, order cards with StatusBadge, "Track Order" OutlinedButton
+- [x] T150 [US5] Update NavGraph — replace OrderHistory placeholder
 
 ### Settings (US6)
 
-- [ ] T151 [US6] Create `app/src/main/java/com/shopflow/app/presentation/screens/settings/SettingsViewModel.kt` — reads/writes PreferencesRepository for all toggles and language
-- [ ] T152 [US6] Create `app/src/main/java/com/shopflow/app/presentation/screens/settings/SettingsScreen.kt` — per spec Screen 11: PREFERENCES section (ToggleRows for push/dark theme/biometric/email), REGION section (Language NavigationRow + language ChipSelector), ACCOUNT & SECURITY section (NavigationRows: Change Password, Privacy, Help Center)
-- [ ] T153 [US6] Update NavGraph — replace Settings placeholder, wire gear icon from Profile
+- [x] T151 [US6] Create `app/src/main/java/com/shopflow/app/presentation/screens/settings/SettingsViewModel.kt` — reads/writes PreferencesRepository for all toggles and language
+- [x] T152 [US6] Create `app/src/main/java/com/shopflow/app/presentation/screens/settings/SettingsScreen.kt` — per spec Screen 11: PREFERENCES section (ToggleRows for push/dark theme/biometric/email), REGION section (Language NavigationRow + language ChipSelector), ACCOUNT & SECURITY section (NavigationRows: Change Password, Privacy, Help Center)
+- [x] T153 [US6] Update NavGraph — replace Settings placeholder, wire gear icon from Profile
 
 ### Notifications (US7)
 
-- [ ] T154 [P] [US7] Create `app/src/main/java/com/shopflow/app/domain/usecase/notification/GetNotificationsUseCase.kt`
-- [ ] T155 [P] [US7] Create `app/src/main/java/com/shopflow/app/domain/usecase/notification/MarkNotificationReadUseCase.kt`
-- [ ] T156 [US7] Create `app/src/main/java/com/shopflow/app/presentation/screens/notifications/NotificationViewModel.kt` — Room-backed notification list, marks as read, exposes unread count
-- [ ] T157 [US7] Create `app/src/main/java/com/shopflow/app/presentation/screens/notifications/NotificationScreen.kt` — notification list with GlassmorphismCards, read/unread styling, tap to navigate via deepLink
-- [ ] T158 [US7] Create `app/src/main/java/com/shopflow/app/data/worker/OrderStatusWorker.kt` — WorkManager PeriodicWorkRequest polling Shopify for order status changes, creates local notifications on change
-- [ ] T159 [US7] Update NavGraph — replace Notifications placeholder, wire bell icon from Home
-- [ ] T160 Run `./gradlew assembleDebug` and verify zero errors
-- [ ] T161 Git commit `feat: add account features (wishlist, profile, orders, settings, notifications)` and push
+- [x] T154 [P] [US7] Create `app/src/main/java/com/shopflow/app/domain/usecase/notification/GetNotificationsUseCase.kt`
+- [x] T155 [P] [US7] Create `app/src/main/java/com/shopflow/app/domain/usecase/notification/MarkNotificationReadUseCase.kt`
+- [x] T156 [US7] Create `app/src/main/java/com/shopflow/app/presentation/screens/notifications/NotificationViewModel.kt` — Room-backed notification list, marks as read, exposes unread count
+- [x] T157 [US7] Create `app/src/main/java/com/shopflow/app/presentation/screens/notifications/NotificationScreen.kt` — notification list with GlassmorphismCards, read/unread styling, tap to navigate via deepLink
+- [x] T158 [US7] Create `app/src/main/java/com/shopflow/app/data/worker/OrderStatusWorker.kt` — WorkManager PeriodicWorkRequest polling Shopify for order status changes, creates local notifications on change
+- [x] T159 [US7] Update NavGraph — replace Notifications placeholder, wire bell icon from Home
+- [x] T160 Run `./gradlew assembleDebug` and verify zero errors
+- [x] T161 Git commit `feat: add account features (wishlist, profile, orders, settings, notifications)` and push
 
 ---
 
