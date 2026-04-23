@@ -44,6 +44,7 @@ import com.shopflow.app.presentation.theme.SurfaceGlass
 import com.shopflow.app.presentation.theme.SurfaceGlassElevated
 import com.shopflow.app.presentation.theme.TextSecondary
 import com.shopflow.app.presentation.theme.TrueBlack
+import com.shopflow.app.presentation.theme.ShopFlowTheme
 import java.text.NumberFormat
 import java.util.Currency
 
@@ -73,7 +74,7 @@ fun ProductDetailScreen(
 
     if (uiState.error != null || product == null) {
         Box(modifier = Modifier.fillMaxSize().background(TrueBlack), contentAlignment = Alignment.Center) {
-            Text(uiState.error ?: "Product not found", color = Color.White)
+            Text(uiState.error ?: "Product not found", color = ShopFlowTheme.colors.textPrimary)
         }
         return
     }
@@ -125,7 +126,7 @@ fun ProductDetailScreen(
                             .clip(CircleShape)
                             .background(SurfaceGlassElevated)
                     ) {
-                        Icon(Icons.Default.ArrowBack, contentDescription = "Back", tint = Color.White)
+                        Icon(Icons.Default.ArrowBack, contentDescription = "Back", tint = ShopFlowTheme.colors.textPrimary)
                     }
 
                     Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -135,7 +136,7 @@ fun ProductDetailScreen(
                                 .clip(CircleShape)
                                 .background(SurfaceGlassElevated)
                         ) {
-                            Icon(Icons.Default.Share, contentDescription = "Share", tint = Color.White)
+                            Icon(Icons.Default.Share, contentDescription = "Share", tint = ShopFlowTheme.colors.textPrimary)
                         }
                         IconButton(
                             onClick = { isWishlisted = !isWishlisted },
@@ -146,7 +147,7 @@ fun ProductDetailScreen(
                             Icon(
                                 if (isWishlisted) Icons.Filled.Favorite else Icons.Outlined.FavoriteBorder,
                                 contentDescription = "Favorite",
-                                tint = if (isWishlisted) NeonMagenta else Color.White
+                                tint = if (isWishlisted) NeonMagenta else ShopFlowTheme.colors.textPrimary
                             )
                         }
                     }
@@ -175,7 +176,7 @@ fun ProductDetailScreen(
                     Text(
                         text = product.title,
                         style = MaterialTheme.typography.headlineMedium.copy(
-                            color = Color.White,
+                            color = ShopFlowTheme.colors.textPrimary,
                             fontWeight = FontWeight.Bold
                         ),
                         modifier = Modifier.weight(1f)
@@ -188,7 +189,7 @@ fun ProductDetailScreen(
                     ) {
                         Text(
                             text = uiState.selectedVariant?.price?.format() ?: product.priceRange.minPrice.format(),
-                            color = Color.White,
+                            color = ShopFlowTheme.colors.textPrimary,
                             fontWeight = FontWeight.Bold,
                             fontSize = 18.sp
                         )
@@ -219,7 +220,7 @@ fun ProductDetailScreen(
                 allOptions.forEach { (optionName, optionValues) ->
                     Text(
                         text = optionName.uppercase(),
-                        color = Color.White,
+                        color = ShopFlowTheme.colors.textPrimary,
                         fontWeight = FontWeight.Bold,
                         fontSize = 14.sp
                     )
@@ -265,7 +266,7 @@ fun ProductDetailScreen(
                 }
 
                 // Description
-                Text("DESCRIPTION", color = Color.White, fontWeight = FontWeight.Bold, fontSize = 14.sp)
+                Text("DESCRIPTION", color = ShopFlowTheme.colors.textPrimary, fontWeight = FontWeight.Bold, fontSize = 14.sp)
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(
                     text = product.description,
@@ -299,3 +300,4 @@ fun ProductDetailScreen(
         }
     }
 }
+

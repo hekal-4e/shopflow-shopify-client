@@ -18,6 +18,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.shopflow.app.presentation.theme.NeonMagenta
 import com.shopflow.app.presentation.theme.TrueBlack
+import com.shopflow.app.presentation.theme.ShopFlowTheme
 
 @Composable
 fun CheckoutScreen(
@@ -50,7 +51,8 @@ fun CheckoutScreen(
         if (uiState.isCreatingCheckout) {
             CircularProgressIndicator(color = NeonMagenta)
         } else if (uiState.error != null) {
-            Text(text = uiState.error ?: "Error", color = Color.White)
+            Text(text = uiState.error ?: "Error", color = ShopFlowTheme.colors.textPrimary)
         }
     }
 }
+

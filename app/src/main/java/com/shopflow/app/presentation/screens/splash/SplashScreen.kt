@@ -105,7 +105,7 @@ fun SplashScreen(
                     Icon(
                         imageVector = Icons.Default.AutoAwesome,
                         contentDescription = null,
-                        tint = Color.White,
+                        tint = ShopFlowTheme.colors.textPrimary,
                         modifier = Modifier.size(28.dp)
                     )
                 }
@@ -114,7 +114,7 @@ fun SplashScreen(
 
                 Text(
                     text = buildAnnotatedString {
-                        withStyle(SpanStyle(color = Color.White, fontWeight = FontWeight.Bold)) {
+                        withStyle(SpanStyle(color = ShopFlowTheme.colors.textPrimary, fontWeight = FontWeight.Bold)) {
                             append("Shop")
                         }
                         withStyle(
@@ -208,14 +208,14 @@ private fun GradientButton(
     ) {
         Text(
             text = text,
-            color = Color.White,
+            color = ShopFlowTheme.colors.textPrimary,
             fontWeight = FontWeight.Bold
         )
         Spacer(modifier = Modifier.size(8.dp))
         Icon(
             imageVector = Icons.Default.ArrowForward,
             contentDescription = null,
-            tint = Color.White
+            tint = ShopFlowTheme.colors.textPrimary
         )
     }
 }

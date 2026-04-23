@@ -20,6 +20,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.shopflow.app.presentation.components.ChipSelector
 import com.shopflow.app.presentation.components.GradientButton
 import com.shopflow.app.presentation.components.ProductCard
+import com.shopflow.app.presentation.theme.ShopFlowTheme
 import com.shopflow.app.presentation.theme.TrueBlack
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -46,13 +47,13 @@ fun WishlistScreen(
         ) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 IconButton(onClick = onNavigateBack) {
-                    Icon(Icons.Default.ArrowBack, contentDescription = "Back", tint = Color.White)
+                    Icon(Icons.Default.ArrowBack, contentDescription = "Back", tint = ShopFlowTheme.colors.textPrimary)
                 }
                 Spacer(modifier = Modifier.width(8.dp))
-                Text("Wishlist", color = Color.White, fontWeight = FontWeight.Bold, fontSize = 20.sp)
+                Text("Wishlist", color = ShopFlowTheme.colors.textPrimary, fontWeight = FontWeight.Bold, fontSize = 20.sp)
             }
             IconButton(onClick = { showFilterSheet = true }) {
-                Icon(Icons.Default.FilterList, contentDescription = "Filter", tint = Color.White)
+                Icon(Icons.Default.FilterList, contentDescription = "Filter", tint = ShopFlowTheme.colors.textPrimary)
             }
         }
 
@@ -62,7 +63,7 @@ fun WishlistScreen(
             }
         } else if (uiState.products.isEmpty()) {
             Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                Text("Your wishlist is empty.", color = Color.Gray)
+                Text("Your wishlist is empty.", color = ShopFlowTheme.colors.textSecondary)
             }
         } else {
             LazyVerticalGrid(
@@ -91,13 +92,13 @@ fun WishlistScreen(
     if (showFilterSheet) {
         ModalBottomSheet(
             onDismissRequest = { showFilterSheet = false },
-            containerColor = Color(0xFF1A1A1A)
+            containerColor = ShopFlowTheme.colors.surfaceGlassElevated
         ) {
             Column(modifier = Modifier.padding(24.dp)) {
-                Text("Filter & Sort", color = Color.White, fontWeight = FontWeight.Bold, fontSize = 18.sp)
+                Text("Filter & Sort", color = ShopFlowTheme.colors.textPrimary, fontWeight = FontWeight.Bold, fontSize = 18.sp)
                 Spacer(modifier = Modifier.height(24.dp))
 
-                Text("SORT BY", color = Color.Gray, fontSize = 12.sp, fontWeight = FontWeight.Bold)
+                Text("SORT BY", color = ShopFlowTheme.colors.textSecondary, fontSize = 12.sp, fontWeight = FontWeight.Bold)
                 Spacer(modifier = Modifier.height(8.dp))
                 ChipSelector(
                     options = listOf("Newest", "Price: Low to High", "Price: High to Low"),
@@ -118,7 +119,7 @@ fun WishlistScreen(
 
                 Spacer(modifier = Modifier.height(24.dp))
 
-                Text("PRICE RANGE", color = Color.Gray, fontSize = 12.sp, fontWeight = FontWeight.Bold)
+                Text("PRICE RANGE", color = ShopFlowTheme.colors.textSecondary, fontSize = 12.sp, fontWeight = FontWeight.Bold)
                 Spacer(modifier = Modifier.height(8.dp))
                 // simplified for demonstration
                 var sliderPosition by remember { mutableStateOf(0f..1000f) }
@@ -129,8 +130,8 @@ fun WishlistScreen(
                     steps = 100
                 )
                 Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-                    Text("$${sliderPosition.start.toInt()}", color = Color.White)
-                    Text("$${sliderPosition.endInclusive.toInt()}", color = Color.White)
+                    Text("$${sliderPosition.start.toInt()}", color = ShopFlowTheme.colors.textPrimary)
+                    Text("$${sliderPosition.endInclusive.toInt()}", color = ShopFlowTheme.colors.textPrimary)
                 }
 
                 Spacer(modifier = Modifier.height(32.dp))
@@ -148,3 +149,4 @@ fun WishlistScreen(
         }
     }
 }
+

@@ -142,11 +142,20 @@ fun ShopFlowNavGraph(
                         navController.navigate(Route.ProductDetail.createRoute(productId))
                     },
                     onNavigateToNotifications = {
-                        // TODO: Navigate to notifications
+                        navController.navigate(Route.Notifications.route)
                     }
                 )
             }
-            composable(Route.Search.route) { PlaceholderScreen("Search") }
+            composable(Route.Search.route) {
+                HomeScreen(
+                    onNavigateToProductDetail = { productId ->
+                        navController.navigate(Route.ProductDetail.createRoute(productId))
+                    },
+                    onNavigateToNotifications = {
+                        navController.navigate(Route.Notifications.route)
+                    }
+                )
+            }
             composable(Route.ProductDetail.route) { backStackEntry ->
                 val productId =
                     backStackEntry.arguments?.getString(Route.ProductDetail.ARG_PRODUCT_ID).orEmpty()
@@ -191,7 +200,14 @@ fun ShopFlowNavGraph(
                     onNavigateToWishlist = { navController.navigate(Route.Wishlist.route) }
                 )
             }
-            composable(Route.OrderHistory.route) { PlaceholderScreen("Order History") }
+            composable(Route.OrderHistory.route) {
+                com.shopflow.app.presentation.screens.orders.OrderHistoryScreen(
+                    onNavigateBack = { navController.popBackStack() },
+                    onNavigateToOrderDetails = { orderId ->
+                        navController.navigate(Route.OrderConfirmation.createRoute(orderId))
+                    }
+                )
+            }
             composable(Route.Wishlist.route) {
                 WishlistScreen(
                     onNavigateBack = { navController.popBackStack() },

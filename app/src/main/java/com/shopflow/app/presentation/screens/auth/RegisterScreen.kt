@@ -34,6 +34,7 @@ import com.shopflow.app.presentation.theme.NeonMagenta
 import com.shopflow.app.presentation.theme.StatusDelivered
 import com.shopflow.app.presentation.theme.SurfaceGlass
 import com.shopflow.app.presentation.theme.TextSecondary
+import com.shopflow.app.presentation.theme.ShopFlowTheme
 import kotlinx.coroutines.flow.collectLatest
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -76,7 +77,7 @@ fun RegisterScreen(
             text = "Create account",
             style = MaterialTheme.typography.headlineMedium.copy(
                 fontWeight = FontWeight.Bold,
-                color = Color.White
+                color = ShopFlowTheme.colors.textPrimary
             )
         )
         Text(
@@ -177,7 +178,7 @@ fun RegisterScreen(
                 ) {
                     Text(
                         text = if (password.length >= 6) "Strong" else "Weak",
-                        color = Color.White,
+                        color = ShopFlowTheme.colors.textPrimary,
                         fontSize = 10.sp,
                         fontWeight = FontWeight.Bold
                     )
@@ -258,3 +259,4 @@ fun RegisterScreen(
         }
     }
 }
+

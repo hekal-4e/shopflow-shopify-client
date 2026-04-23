@@ -34,6 +34,7 @@ import com.shopflow.app.presentation.components.OutlinedButton
 import com.shopflow.app.presentation.theme.NeonMagenta
 import com.shopflow.app.presentation.theme.SurfaceGlass
 import com.shopflow.app.presentation.theme.TextSecondary
+import com.shopflow.app.presentation.theme.ShopFlowTheme
 import kotlinx.coroutines.flow.collectLatest
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -92,7 +93,7 @@ fun LoginScreen(
             text = "Welcome back",
             style = MaterialTheme.typography.headlineMedium.copy(
                 fontWeight = FontWeight.Bold,
-                color = Color.White
+                color = ShopFlowTheme.colors.textPrimary
             )
         )
         Text(
@@ -210,5 +211,17 @@ fun LoginScreen(
                 modifier = Modifier.clickable(onClick = onNavigateToRegister)
             )
         }
+    }
+}
+
+@androidx.compose.ui.tooling.preview.Preview(showBackground = true, backgroundColor = 0xFF09090B)
+@Composable
+private fun LoginScreenPreview() {
+    com.shopflow.app.presentation.theme.ShopFlowTheme {
+        LoginScreen(
+            onNavigateToRegister = {},
+            onLoginSuccess = {}
+            // Note: ViewModel injection will fail in preview, but we bypass it for UI viewing
+        )
     }
 }
