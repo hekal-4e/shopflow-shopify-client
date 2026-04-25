@@ -28,6 +28,7 @@ import com.shopflow.app.presentation.theme.TrueBlack
 @Composable
 fun SettingsScreen(
     onNavigateBack: () -> Unit,
+    onLogout: () -> Unit,
     viewModel: SettingsViewModel = hiltViewModel()
 ) {
     val preferences by viewModel.preferences.collectAsState()
@@ -116,7 +117,10 @@ fun SettingsScreen(
             HorizontalDivider(color = ShopFlowTheme.colors.surfaceGlassElevated, modifier = Modifier.padding(horizontal = 16.dp))
             NavigationRow("Help Center") {}
             HorizontalDivider(color = ShopFlowTheme.colors.surfaceGlassElevated, modifier = Modifier.padding(horizontal = 16.dp))
-            NavigationRow("Log Out", isDestructive = true) {}
+            NavigationRow("Log Out", isDestructive = true) {
+                viewModel.logout()
+                onLogout()
+            }
         }
         
         Spacer(modifier = Modifier.height(32.dp))

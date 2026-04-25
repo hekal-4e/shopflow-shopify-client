@@ -1,5 +1,7 @@
 package com.shopflow.app.presentation.navigation
 
+import java.net.URLEncoder
+
 sealed interface Route {
     val route: String
 
@@ -13,7 +15,7 @@ sealed interface Route {
     data object ProductDetail : Route {
         const val ARG_PRODUCT_ID = "productId"
         override val route: String = "product/{$ARG_PRODUCT_ID}"
-        fun createRoute(productId: String): String = "product/$productId"
+        fun createRoute(productId: String): String = "product/${URLEncoder.encode(productId, "UTF-8")}"
     }
 
     data object Cart : Route { override val route: String = "cart" }
@@ -22,7 +24,7 @@ sealed interface Route {
     data object OrderConfirmation : Route {
         const val ARG_ORDER_ID = "orderId"
         override val route: String = "order-confirmation/{$ARG_ORDER_ID}"
-        fun createRoute(orderId: String): String = "order-confirmation/$orderId"
+        fun createRoute(orderId: String): String = "order-confirmation/${URLEncoder.encode(orderId, "UTF-8")}"
     }
 
     data object Profile : Route { override val route: String = "profile" }

@@ -1,21 +1,36 @@
 package com.shopflow.app.data.repository
 
+import com.google.gson.Gson
+import com.shopflow.app.data.remote.dto.CartWebhookRequest
+import com.shopflow.app.di.WebhookClient
 import com.shopflow.app.domain.model.Cart
 import com.shopflow.app.domain.model.CartLineItem
 import com.shopflow.app.domain.model.Money
 import com.shopflow.app.domain.model.Product
 import com.shopflow.app.domain.model.ProductVariant
 import com.shopflow.app.domain.repository.CartRepository
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.withContext
+import okhttp3.HttpUrl
+import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import okhttp3.RequestBody.Companion.toRequestBody
+import java.io.IOException
 import java.util.UUID
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class CartRepositoryImpl @Inject constructor() : CartRepository {
+class CartRepositoryImpl @Inject constructor(
+    @WebhookClient private val webhookClient: OkHttpClient
+) : CartRepository {
+
+    private val gson = Gson()
 
     private val _cartState = MutableStateFlow(Cart(id = UUID.randomUUID().toString(), lineItems = emptyList(), subtotal = Money(0.0, "USD"), itemCount = 0))
     override val cartState: Flow<Cart> = _cartState.asStateFlow()
@@ -96,5 +111,43 @@ class CartRepositoryImpl @Inject constructor() : CartRepository {
             subtotal = Money(subtotalAmount, currencyCode),
             itemCount = count
         )
+    }
+
+    override suspend fun notifyCartAbandonment(email: String, productName: String): Result<Unit> {
+        return withContext(Dispatchers.IO) {
+            try {
+                val webhookRequest = CartWebhookRequest(
+                    userEmail = email,
+                    productName = productName
+                )
+                val jsonPayload = gson.toJson(webhookRequest)
+                val requestBody = jsonPayload.toRequestBody("application/json".toMediaType())
+
+                val request = Request.Builder()
+                    .url(HttpUrl.Builder()
+                        .scheme("https")
+                        .host("hekl.app.n8n.cloud")
+                        .addPathSegment("webhook")
+                        .addPathSegment("cart-abandonment")
+                        .build())
+                    .post(requestBody)
+                    .addHeader("Content-Type", "application/json")
+                    .build()
+
+                webhookClient.newCall(request).execute().use { response ->
+                    if (response.isSuccessful) {
+                        Result.success(Unit)
+                    } else {
+                        Result.failure(IOException("Webhook failed with code: ${response.code}"))
+                    }
+                }
+            } catch (e: IOException) {
+                Result.failure(e)
+            } catch (e: kotlinx.coroutines.CancellationException) {
+                throw e
+            } catch (e: Exception) {
+                Result.failure(IOException("Unexpected error: ${e.message}", e))
+            }
+        }
     }
 }

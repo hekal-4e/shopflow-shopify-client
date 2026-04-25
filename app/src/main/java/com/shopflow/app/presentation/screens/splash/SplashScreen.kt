@@ -48,22 +48,25 @@ import kotlinx.coroutines.delay
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.shopflow.app.presentation.screens.onboarding.OnboardingViewModel
+import com.shopflow.app.presentation.screens.splash.SplashViewModel
 
 @Composable
 fun SplashScreen(
     onGetStarted: () -> Unit,
     onSignIn: () -> Unit,
     onAutoNavigateHome: () -> Unit,
-    viewModel: OnboardingViewModel = hiltViewModel()
+    viewModel: SplashViewModel = hiltViewModel()
 ) {
     val context = LocalContext.current
-    val hasCompletedOnboarding by viewModel.hasCompletedOnboarding.collectAsState()
+    val decision by viewModel.decision.collectAsState()
 
-    LaunchedEffect(hasCompletedOnboarding) {
-        if (hasCompletedOnboarding) {
-            delay(2500)
-            onAutoNavigateHome()
+    LaunchedEffect(decision) {
+        if (!decision.isReady) return@LaunchedEffect
+        delay(2500)
+        when {
+            !decision.hasCompletedOnboarding -> onGetStarted()
+            !decision.isAuthenticated -> onSignIn()
+            else -> onAutoNavigateHome()
         }
     }
 

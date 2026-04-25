@@ -62,6 +62,11 @@ fun HomeScreen(
             .background(TrueBlack)
             .padding(top = 16.dp)
     ) {
+        if (uiState.isLoading) {
+            Box(modifier = Modifier.fillMaxWidth().padding(top = 16.dp), contentAlignment = Alignment.Center) {
+                CircularProgressIndicator(color = NeonMagenta)
+            }
+        }
         // Top Bar
         Row(
             modifier = Modifier
@@ -138,9 +143,9 @@ fun HomeScreen(
                         name = product.title,
                         price = product.priceRange.minPrice.format(),
                         isPremium = false,
-                        isWishlisted = false,
-                        onWishlistToggle = {},
-                        onAddToCart = {},
+                        isWishlisted = uiState.wishlistedProductIds.contains(product.id),
+                        onWishlistToggle = { viewModel.toggleWishlist(product) },
+                        onAddToCart = { viewModel.addToCart(product) },
                         onClick = { onNavigateToProductDetail(product.id) }
                     )
                 }
@@ -220,9 +225,9 @@ fun HomeScreen(
                         name = product.title,
                         price = product.priceRange.minPrice.format(),
                         isPremium = false,
-                        isWishlisted = false,
-                        onWishlistToggle = {},
-                        onAddToCart = {},
+                        isWishlisted = uiState.wishlistedProductIds.contains(product.id),
+                        onWishlistToggle = { viewModel.toggleWishlist(product) },
+                        onAddToCart = { viewModel.addToCart(product) },
                         onClick = { onNavigateToProductDetail(product.id) }
                     )
                 }

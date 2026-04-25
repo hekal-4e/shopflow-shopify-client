@@ -230,7 +230,12 @@ fun ShopFlowNavGraph(
             }
             composable(Route.Settings.route) {
                 SettingsScreen(
-                    onNavigateBack = { navController.popBackStack() }
+                    onNavigateBack = { navController.popBackStack() },
+                    onLogout = {
+                        navController.navigate(Route.Splash.route) {
+                            popUpTo(0)
+                        }
+                    }
                 )
             }
         }
