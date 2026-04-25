@@ -84,7 +84,7 @@ graph TD
 
 1. **Clone the repository:**
    ```bash
-   git clone https://github.com/yourusername/ShopFlow.git
+   git clone https://github.com/hekal-4e/shopflow-shopify-client
    ```
 
 2. **Configure Environment Variables:**
