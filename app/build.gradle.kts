@@ -10,6 +10,8 @@ plugins {
     alias(libs.plugins.room)
 }
 
+
+
 val secretsProperties = Properties().apply {
     val secretsFile = rootProject.file("secrets.properties")
     if (secretsFile.exists()) {
@@ -21,12 +23,12 @@ fun getSecret(key: String): String = secretsProperties.getProperty(key, "")
 
 android {
     namespace = "com.shopflow.app"
-    compileSdk = 36
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.shopflow.app"
         minSdk = 26
-        targetSdk = 36
+        targetSdk = 35
         versionCode = 1
         versionName = "1.0"
 
@@ -93,9 +95,9 @@ dependencies {
     implementation(libs.apollo.runtime)
     implementation(libs.hilt.android)
     implementation(libs.androidx.hilt.navigation.compose)
-    implementation("androidx.hilt:hilt-work:1.2.0")
-    ksp("androidx.hilt:hilt-compiler:1.2.0")
+    implementation(libs.androidx.hilt.work)
     ksp(libs.hilt.compiler)
+    ksp(libs.androidx.hilt.compiler)
     implementation(libs.androidx.room.runtime)
     implementation(libs.androidx.room.ktx)
     ksp(libs.androidx.room.compiler)
@@ -104,6 +106,7 @@ dependencies {
     implementation(libs.androidx.work.runtime.ktx)
     implementation(libs.kotlinx.coroutines.android)
     implementation(libs.okhttp)
+    implementation(libs.gson)
     testImplementation(libs.junit4)
     testImplementation(libs.junit5.api)
     testRuntimeOnly(libs.junit5.engine)
