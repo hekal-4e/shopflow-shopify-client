@@ -1,0 +1,7 @@
+{
+  "java.configuration.updateBuildConfiguration": "automatic",
+  "chat.tools.terminal.autoApprove": {
+    "Test-Path": true,
+    "git rev-parse": true
+  }
+}

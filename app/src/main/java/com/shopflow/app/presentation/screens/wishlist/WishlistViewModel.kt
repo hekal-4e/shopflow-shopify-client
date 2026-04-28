@@ -2,7 +2,10 @@ package com.shopflow.app.presentation.screens.wishlist
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.shopflow.app.domain.model.ApiResult
 import com.shopflow.app.domain.model.WishlistItem
+import com.shopflow.app.domain.usecase.cart.AddToCartUseCase
+import com.shopflow.app.domain.usecase.product.GetProductDetailUseCase
 import com.shopflow.app.domain.usecase.wishlist.AddToWishlistUseCase
 import com.shopflow.app.domain.usecase.wishlist.GetWishlistUseCase
 import com.shopflow.app.domain.usecase.wishlist.RemoveFromWishlistUseCase
@@ -31,7 +34,9 @@ data class WishlistUiState(
 class WishlistViewModel @Inject constructor(
     getWishlistUseCase: GetWishlistUseCase,
     private val addToWishlistUseCase: AddToWishlistUseCase,
-    private val removeFromWishlistUseCase: RemoveFromWishlistUseCase
+    private val removeFromWishlistUseCase: RemoveFromWishlistUseCase,
+    private val getProductDetailUseCase: GetProductDetailUseCase,
+    private val addToCartUseCase: AddToCartUseCase
 ) : ViewModel() {
 
     private val _selectedBrand = MutableStateFlow<String?>(null)
@@ -84,6 +89,19 @@ class WishlistViewModel @Inject constructor(
     fun removeProduct(productId: String) {
         viewModelScope.launch {
             removeFromWishlistUseCase(productId)
+        }
+    }
+
+    fun addProductToCart(productId: String) {
+        viewModelScope.launch {
+            when (val result = getProductDetailUseCase(productId)) {
+                is ApiResult.Success -> {
+                    val product = result.data
+                    val variant = product.variants.firstOrNull() ?: return@launch
+                    addToCartUseCase(product, variant, 1)
+                }
+                else -> Unit
+            }
         }
     }
 }

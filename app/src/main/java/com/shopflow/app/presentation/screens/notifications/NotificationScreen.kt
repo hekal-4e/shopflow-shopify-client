@@ -22,10 +22,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.shopflow.app.domain.model.Notification
+import com.shopflow.app.presentation.components.GlassmorphismCard
 import com.shopflow.app.presentation.theme.NeonMagenta
 import com.shopflow.app.presentation.theme.SurfaceGlass
 import com.shopflow.app.presentation.theme.TextSecondary
 import com.shopflow.app.presentation.theme.TrueBlack
+import com.shopflow.app.presentation.theme.ShopFlowTheme
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -49,11 +51,11 @@ fun NotificationScreen(
             verticalAlignment = Alignment.CenterVertically
         ) {
             IconButton(onClick = onNavigateBack) {
-                Icon(Icons.Default.ArrowBack, contentDescription = "Back", tint = Color.White)
+                Icon(Icons.Default.ArrowBack, contentDescription = "Back", tint = ShopFlowTheme.colors.textPrimary)
             }
             Text(
                 text = "Notifications",
-                color = Color.White,
+                color = ShopFlowTheme.colors.textPrimary,
                 fontWeight = FontWeight.Bold,
                 fontSize = 20.sp,
                 modifier = Modifier.padding(start = 16.dp)
@@ -93,13 +95,12 @@ fun NotificationCard(notification: Notification, onClick: () -> Unit) {
     val format = SimpleDateFormat("MMM dd, HH:mm", Locale.US)
     val dateStr = format.format(Date(notification.createdAt))
 
-    Card(
-        onClick = onClick,
-        colors = CardDefaults.cardColors(containerColor = SurfaceGlass),
-        shape = RoundedCornerShape(16.dp),
-        modifier = Modifier.fillMaxWidth()
+    GlassmorphismCard(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable(onClick = onClick)
     ) {
-        Row(modifier = Modifier.padding(16.dp), verticalAlignment = Alignment.Top) {
+        Row(modifier = Modifier.padding(4.dp), verticalAlignment = Alignment.Top) {
             Box(
                 modifier = Modifier
                     .size(10.dp)
@@ -113,7 +114,7 @@ fun NotificationCard(notification: Notification, onClick: () -> Unit) {
             Column(modifier = Modifier.weight(1f)) {
                 Text(
                     text = notification.title,
-                    color = Color.White,
+                    color = ShopFlowTheme.colors.textPrimary,
                     fontWeight = if (notification.isRead) FontWeight.Normal else FontWeight.Bold,
                     fontSize = 16.sp
                 )
@@ -133,3 +134,4 @@ fun NotificationCard(notification: Notification, onClick: () -> Unit) {
         }
     }
 }
+

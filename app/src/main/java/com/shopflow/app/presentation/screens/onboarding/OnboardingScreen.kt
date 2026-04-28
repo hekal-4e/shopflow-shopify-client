@@ -25,6 +25,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.shopflow.app.presentation.components.GradientButton
 import com.shopflow.app.presentation.theme.NeonMagenta
 import com.shopflow.app.presentation.theme.TextSecondary
+import com.shopflow.app.presentation.theme.ShopFlowTheme
 import kotlinx.coroutines.launch
 
 @Composable
@@ -79,15 +80,20 @@ fun OnboardingScreen(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center
             ) {
-                // Placeholder for an image or animation
-                Box(
-                    modifier = Modifier
-                        .size(200.dp)
-                        .background(NeonMagenta.copy(alpha = 0.1f), shape = CircleShape),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text("Image $page", color = NeonMagenta)
+                val imageUrl = when (page) {
+                    0 -> "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=600&q=80" // Fashion / models
+                    1 -> "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=600&q=80" // Checkout / Payment
+                    else -> "https://images.unsplash.com/photo-1586880244406-556ebe35f282?w=600&q=80" // Delivery / Box
                 }
+                
+                coil.compose.AsyncImage(
+                    model = imageUrl,
+                    contentDescription = "Onboarding Image $page",
+                    contentScale = androidx.compose.ui.layout.ContentScale.Crop,
+                    modifier = Modifier
+                        .size(240.dp)
+                        .clip(CircleShape)
+                )
 
                 Spacer(modifier = Modifier.height(48.dp))
 
@@ -95,7 +101,7 @@ fun OnboardingScreen(
                     text = pages[page].first,
                     style = MaterialTheme.typography.headlineMedium.copy(
                         fontWeight = FontWeight.Bold,
-                        color = Color.White
+                        color = ShopFlowTheme.colors.textPrimary
                     ),
                     textAlign = TextAlign.Center
                 )
@@ -150,3 +156,4 @@ fun OnboardingScreen(
         Spacer(modifier = Modifier.height(16.dp))
     }
 }
+

@@ -40,6 +40,7 @@ import com.shopflow.app.presentation.theme.NeonMagenta
 import com.shopflow.app.presentation.theme.SurfaceGlass
 import com.shopflow.app.presentation.theme.TextSecondary
 import com.shopflow.app.presentation.theme.TrueBlack
+import com.shopflow.app.presentation.theme.ShopFlowTheme
 
 private fun Money.format(): String {
     val format = NumberFormat.getCurrencyInstance()
@@ -61,6 +62,11 @@ fun HomeScreen(
             .background(TrueBlack)
             .padding(top = 16.dp)
     ) {
+        if (uiState.isLoading) {
+            Box(modifier = Modifier.fillMaxWidth().padding(top = 16.dp), contentAlignment = Alignment.Center) {
+                CircularProgressIndicator(color = NeonMagenta)
+            }
+        }
         // Top Bar
         Row(
             modifier = Modifier
@@ -78,7 +84,7 @@ fun HomeScreen(
                         .background(SurfaceGlass)
                 ) {
                     AsyncImage(
-                        model = "https://i.pravatar.cc/150?img=32",
+                        model = uiState.customerAvatarUrl ?: "https://i.pravatar.cc/150",
                         contentDescription = "Avatar",
                         contentScale = ContentScale.Crop,
                         modifier = Modifier.fillMaxSize()
@@ -87,7 +93,7 @@ fun HomeScreen(
                 Spacer(modifier = Modifier.width(12.dp))
                 Column {
                     Text("Good morning,", color = TextSecondary, fontSize = 12.sp)
-                    Text("Alex", color = Color.White, fontWeight = FontWeight.Bold, fontSize = 16.sp)
+                    Text(if (uiState.customerName.isNotEmpty()) uiState.customerName else "Guest", color = ShopFlowTheme.colors.textPrimary, fontWeight = FontWeight.Bold, fontSize = 16.sp)
                 }
             }
 
@@ -95,12 +101,14 @@ fun HomeScreen(
             IconButton(onClick = onNavigateToNotifications) {
                 BadgedBox(
                     badge = {
-                        Badge(containerColor = NeonMagenta, contentColor = Color.White) {
-                            Text("2")
+                        if (uiState.unreadNotificationCount > 0) {
+                            Badge(containerColor = NeonMagenta, contentColor = ShopFlowTheme.colors.textPrimary) {
+                                Text("${uiState.unreadNotificationCount}")
+                            }
                         }
                     }
                 ) {
-                    Icon(Icons.Default.Notifications, contentDescription = "Notifications", tint = Color.White)
+                    Icon(Icons.Default.Notifications, contentDescription = "Notifications", tint = ShopFlowTheme.colors.textPrimary)
                 }
             }
         }
@@ -135,9 +143,9 @@ fun HomeScreen(
                         name = product.title,
                         price = product.priceRange.minPrice.format(),
                         isPremium = false,
-                        isWishlisted = false,
-                        onWishlistToggle = {},
-                        onAddToCart = {},
+                        isWishlisted = uiState.wishlistedProductIds.contains(product.id),
+                        onWishlistToggle = { viewModel.toggleWishlist(product) },
+                        onAddToCart = { viewModel.addToCart(product) },
                         onClick = { onNavigateToProductDetail(product.id) }
                     )
                 }
@@ -182,7 +190,7 @@ fun HomeScreen(
                                 horizontalArrangement = Arrangement.SpaceBetween,
                                 verticalAlignment = Alignment.CenterVertically
                             ) {
-                                Text("Categories", color = Color.White, fontWeight = FontWeight.Bold, fontSize = 18.sp)
+                                Text("Categories", color = ShopFlowTheme.colors.textPrimary, fontWeight = FontWeight.Bold, fontSize = 18.sp)
                                 Text("See All", color = NeonMagenta, fontSize = 14.sp, modifier = Modifier.clickable { })
                             }
                             Spacer(modifier = Modifier.height(16.dp))
@@ -205,7 +213,7 @@ fun HomeScreen(
                             horizontalArrangement = Arrangement.SpaceBetween,
                             verticalAlignment = Alignment.CenterVertically
                         ) {
-                            Text("Featured", color = Color.White, fontWeight = FontWeight.Bold, fontSize = 18.sp)
+                            Text("Featured", color = ShopFlowTheme.colors.textPrimary, fontWeight = FontWeight.Bold, fontSize = 18.sp)
                         }
                         Spacer(modifier = Modifier.height(16.dp))
                     }
@@ -217,9 +225,9 @@ fun HomeScreen(
                         name = product.title,
                         price = product.priceRange.minPrice.format(),
                         isPremium = false,
-                        isWishlisted = false,
-                        onWishlistToggle = {},
-                        onAddToCart = {},
+                        isWishlisted = uiState.wishlistedProductIds.contains(product.id),
+                        onWishlistToggle = { viewModel.toggleWishlist(product) },
+                        onAddToCart = { viewModel.addToCart(product) },
                         onClick = { onNavigateToProductDetail(product.id) }
                     )
                 }
@@ -227,3 +235,4 @@ fun HomeScreen(
         }
     }
 }
+

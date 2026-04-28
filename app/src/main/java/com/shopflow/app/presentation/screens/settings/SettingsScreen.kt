@@ -20,6 +20,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.shopflow.app.presentation.components.ChipSelector
 import com.shopflow.app.presentation.theme.NeonMagenta
+import com.shopflow.app.presentation.theme.ShopFlowTheme
 import com.shopflow.app.presentation.theme.SurfaceGlass
 import com.shopflow.app.presentation.theme.TextSecondary
 import com.shopflow.app.presentation.theme.TrueBlack
@@ -27,6 +28,7 @@ import com.shopflow.app.presentation.theme.TrueBlack
 @Composable
 fun SettingsScreen(
     onNavigateBack: () -> Unit,
+    onLogout: () -> Unit,
     viewModel: SettingsViewModel = hiltViewModel()
 ) {
     val preferences by viewModel.preferences.collectAsState()
@@ -44,11 +46,11 @@ fun SettingsScreen(
             verticalAlignment = Alignment.CenterVertically
         ) {
             IconButton(onClick = onNavigateBack) {
-                Icon(Icons.Default.ArrowBack, contentDescription = "Back", tint = Color.White)
+                Icon(Icons.Default.ArrowBack, contentDescription = "Back", tint = ShopFlowTheme.colors.textPrimary)
             }
             Text(
                 text = "Settings",
-                color = Color.White,
+                color = ShopFlowTheme.colors.textPrimary,
                 fontWeight = FontWeight.Bold,
                 fontSize = 20.sp,
                 modifier = Modifier.padding(start = 16.dp)
@@ -66,11 +68,11 @@ fun SettingsScreen(
                 .background(SurfaceGlass, RoundedCornerShape(16.dp))
         ) {
             ToggleRow("Push Notifications", preferences.pushNotifications) { viewModel.togglePushNotifications(it) }
-            Divider(color = Color.DarkGray, modifier = Modifier.padding(horizontal = 16.dp))
+            HorizontalDivider(color = ShopFlowTheme.colors.surfaceGlassElevated, modifier = Modifier.padding(horizontal = 16.dp))
             ToggleRow("Dark Theme", preferences.themeMode.equals("DARK", ignoreCase = true)) { viewModel.toggleDarkTheme(it) }
-            Divider(color = Color.DarkGray, modifier = Modifier.padding(horizontal = 16.dp))
+            HorizontalDivider(color = ShopFlowTheme.colors.surfaceGlassElevated, modifier = Modifier.padding(horizontal = 16.dp))
             ToggleRow("Biometric Login", preferences.biometricEnabled) { viewModel.toggleBiometrics(it) }
-            Divider(color = Color.DarkGray, modifier = Modifier.padding(horizontal = 16.dp))
+            HorizontalDivider(color = ShopFlowTheme.colors.surfaceGlassElevated, modifier = Modifier.padding(horizontal = 16.dp))
             ToggleRow("Email Marketing", preferences.emailMarketing) { viewModel.toggleEmailMarketing(it) }
         }
 
@@ -87,7 +89,7 @@ fun SettingsScreen(
         ) {
             Text(
                 text = "Language",
-                color = Color.White,
+                color = ShopFlowTheme.colors.textPrimary,
                 fontSize = 16.sp,
                 modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
             )
@@ -110,12 +112,15 @@ fun SettingsScreen(
                 .background(SurfaceGlass, RoundedCornerShape(16.dp))
         ) {
             NavigationRow("Change Password") {}
-            Divider(color = Color.DarkGray, modifier = Modifier.padding(horizontal = 16.dp))
+            HorizontalDivider(color = ShopFlowTheme.colors.surfaceGlassElevated, modifier = Modifier.padding(horizontal = 16.dp))
             NavigationRow("Privacy Settings") {}
-            Divider(color = Color.DarkGray, modifier = Modifier.padding(horizontal = 16.dp))
+            HorizontalDivider(color = ShopFlowTheme.colors.surfaceGlassElevated, modifier = Modifier.padding(horizontal = 16.dp))
             NavigationRow("Help Center") {}
-            Divider(color = Color.DarkGray, modifier = Modifier.padding(horizontal = 16.dp))
-            NavigationRow("Log Out", isDestructive = true) {}
+            HorizontalDivider(color = ShopFlowTheme.colors.surfaceGlassElevated, modifier = Modifier.padding(horizontal = 16.dp))
+            NavigationRow("Log Out", isDestructive = true) {
+                viewModel.logout()
+                onLogout()
+            }
         }
         
         Spacer(modifier = Modifier.height(32.dp))
@@ -142,12 +147,12 @@ private fun ToggleRow(title: String, isChecked: Boolean, onCheckedChange: (Boole
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Text(title, color = Color.White, fontSize = 16.sp)
+        Text(title, color = ShopFlowTheme.colors.textPrimary, fontSize = 16.sp)
         Switch(
             checked = isChecked,
             onCheckedChange = onCheckedChange,
             colors = SwitchDefaults.colors(
-                checkedThumbColor = Color.White,
+                checkedThumbColor = ShopFlowTheme.colors.textPrimary,
                 checkedTrackColor = NeonMagenta
             )
         )
@@ -164,7 +169,8 @@ private fun NavigationRow(title: String, isDestructive: Boolean = false, onClick
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Text(title, color = if (isDestructive) Color.Red else Color.White, fontSize = 16.sp)
+        Text(title, color = if (isDestructive) MaterialTheme.colorScheme.error else ShopFlowTheme.colors.textPrimary, fontSize = 16.sp)
         Icon(Icons.Default.ChevronRight, contentDescription = null, tint = TextSecondary)
     }
 }
+

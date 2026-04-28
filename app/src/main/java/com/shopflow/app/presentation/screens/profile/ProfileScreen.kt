@@ -31,6 +31,7 @@ import com.shopflow.app.presentation.theme.SurfaceGlass
 import com.shopflow.app.presentation.theme.SurfaceGlassElevated
 import com.shopflow.app.presentation.theme.TextSecondary
 import com.shopflow.app.presentation.theme.TrueBlack
+import com.shopflow.app.presentation.theme.ShopFlowTheme
 
 @Composable
 fun ProfileScreen(
@@ -55,9 +56,9 @@ fun ProfileScreen(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            Text("Profile", color = Color.White, fontWeight = FontWeight.Bold, fontSize = 24.sp)
+            Text("Profile", color = ShopFlowTheme.colors.textPrimary, fontWeight = FontWeight.Bold, fontSize = 24.sp)
             IconButton(onClick = onNavigateToSettings) {
-                Icon(Icons.Default.Settings, contentDescription = "Settings", tint = Color.White)
+                Icon(Icons.Default.Settings, contentDescription = "Settings", tint = ShopFlowTheme.colors.textPrimary)
             }
         }
 
@@ -79,7 +80,7 @@ fun ProfileScreen(
                 ) {
                     Text(
                         text = "${customer.firstName.firstOrNull() ?: ""}${customer.lastName.firstOrNull() ?: ""}",
-                        color = Color.White,
+                        color = ShopFlowTheme.colors.textPrimary,
                         fontWeight = FontWeight.Bold,
                         fontSize = 32.sp
                     )
@@ -89,7 +90,7 @@ fun ProfileScreen(
 
                 Text(
                     text = "${customer.firstName} ${customer.lastName}",
-                    color = Color.White,
+                    color = ShopFlowTheme.colors.textPrimary,
                     fontWeight = FontWeight.Bold,
                     fontSize = 20.sp
                 )
@@ -147,7 +148,7 @@ fun ProfileScreen(
 @Composable
 private fun StatItem(label: String, value: String) {
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
-        Text(value, color = Color.White, fontWeight = FontWeight.Bold, fontSize = 20.sp)
+        Text(value, color = ShopFlowTheme.colors.textPrimary, fontWeight = FontWeight.Bold, fontSize = 20.sp)
         Spacer(modifier = Modifier.height(4.dp))
         Text(label, color = TextSecondary, fontSize = 12.sp)
     }
@@ -163,7 +164,8 @@ private fun NavigationRow(title: String, onClick: () -> Unit) {
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Text(title, color = Color.White, fontSize = 16.sp)
+        Text(title, color = ShopFlowTheme.colors.textPrimary, fontSize = 16.sp)
         Icon(Icons.Default.ChevronRight, contentDescription = null, tint = TextSecondary)
     }
 }
+

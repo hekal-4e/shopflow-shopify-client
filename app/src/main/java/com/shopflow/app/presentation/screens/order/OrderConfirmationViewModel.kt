@@ -13,6 +13,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import java.net.URLDecoder
 import javax.inject.Inject
 
 data class OrderConfirmationUiState(
@@ -28,7 +29,9 @@ class OrderConfirmationViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
-    private val orderId: String = checkNotNull(savedStateHandle["orderId"])
+    private val orderId: String = URLDecoder.decode(
+        checkNotNull(savedStateHandle["orderId"]), "UTF-8"
+    )
 
     private val _uiState = MutableStateFlow(OrderConfirmationUiState())
     val uiState: StateFlow<OrderConfirmationUiState> = _uiState.asStateFlow()

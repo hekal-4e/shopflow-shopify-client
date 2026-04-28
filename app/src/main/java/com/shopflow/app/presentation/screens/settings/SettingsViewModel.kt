@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.shopflow.app.domain.model.UserPreferences
 import com.shopflow.app.domain.repository.PreferencesRepository
+import com.shopflow.app.domain.repository.AuthRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -14,7 +15,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SettingsViewModel @Inject constructor(
-    private val preferencesRepository: PreferencesRepository
+    private val preferencesRepository: PreferencesRepository,
+    private val authRepository: AuthRepository
 ) : ViewModel() {
 
     val preferences: StateFlow<UserPreferences> = preferencesRepository.getPreferences()
@@ -51,6 +53,12 @@ class SettingsViewModel @Inject constructor(
     fun setLanguage(languageCode: String) {
         viewModelScope.launch {
             preferencesRepository.setLanguageCode(languageCode)
+        }
+    }
+
+    fun logout() {
+        viewModelScope.launch {
+            authRepository.logout()
         }
     }
 }

@@ -15,5 +15,6 @@ interface AuthRepository {
 
     suspend fun refreshToken(accessToken: String): ApiResult<String>
     suspend fun logout()
+    suspend fun getStoredAccessToken(): String?
     fun getAuthState(): Flow<Boolean>
 }

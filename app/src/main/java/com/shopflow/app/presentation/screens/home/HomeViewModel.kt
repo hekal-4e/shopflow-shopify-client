@@ -8,6 +8,16 @@ import com.shopflow.app.domain.model.Product
 import com.shopflow.app.domain.usecase.product.GetCollectionsUseCase
 import com.shopflow.app.domain.usecase.product.GetFeaturedProductsUseCase
 import com.shopflow.app.domain.usecase.product.SearchProductsUseCase
+import com.shopflow.app.domain.usecase.cart.AddToCartUseCase
+import com.shopflow.app.domain.usecase.cart.ScheduleAbandonedCartNotificationUseCase
+import com.shopflow.app.domain.usecase.wishlist.AddToWishlistUseCase
+import com.shopflow.app.domain.usecase.wishlist.RemoveFromWishlistUseCase
+import com.shopflow.app.domain.usecase.profile.GetCustomerProfileUseCase
+import com.shopflow.app.domain.repository.NotificationRepository
+import com.shopflow.app.domain.repository.AuthRepository
+import com.shopflow.app.domain.repository.WishlistRepository
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.CancellationException
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -24,14 +34,26 @@ data class HomeUiState(
     val featuredProducts: List<Product> = emptyList(),
     val searchResults: List<Product> = emptyList(),
     val banners: List<String> = emptyList(),
-    val error: String? = null
+    val error: String? = null,
+    val customerName: String = "",
+    val customerAvatarUrl: String? = null,
+    val unreadNotificationCount: Int = 0,
+    val wishlistedProductIds: Set<String> = emptySet()
 )
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     private val getCollectionsUseCase: GetCollectionsUseCase,
     private val getFeaturedProductsUseCase: GetFeaturedProductsUseCase,
-    private val searchProductsUseCase: SearchProductsUseCase
+    private val searchProductsUseCase: SearchProductsUseCase,
+    private val getCustomerProfileUseCase: GetCustomerProfileUseCase,
+    private val notificationRepository: NotificationRepository,
+    private val authRepository: AuthRepository,
+    private val addToCartUseCase: AddToCartUseCase,
+    private val addToWishlistUseCase: AddToWishlistUseCase,
+    private val removeFromWishlistUseCase: RemoveFromWishlistUseCase,
+    private val wishlistRepository: WishlistRepository,
+    private val scheduleAbandonedCartNotificationUseCase: ScheduleAbandonedCartNotificationUseCase
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(HomeUiState())
@@ -39,6 +61,8 @@ class HomeViewModel @Inject constructor(
 
     init {
         fetchHomeData()
+        observeNotifications()
+        observeWishlist()
     }
 
     fun fetchHomeData() {
@@ -49,8 +73,12 @@ class HomeViewModel @Inject constructor(
             val collectionsResult = getCollectionsUseCase()
             val featuredResult = getFeaturedProductsUseCase()
             
+            val token = authRepository.getStoredAccessToken()
+            val profileResult = if (token != null) getCustomerProfileUseCase() else null
+            
             var collections: List<Collection> = emptyList()
             var featured: List<Product> = emptyList()
+            var name = ""
             var error: String? = null
 
             if (collectionsResult is ApiResult.Success) collections = collectionsResult.data
@@ -58,6 +86,10 @@ class HomeViewModel @Inject constructor(
 
             if (featuredResult is ApiResult.Success) featured = featuredResult.data
             else if (featuredResult is ApiResult.NetworkError && error == null) error = featuredResult.exception.message
+
+            if (profileResult is ApiResult.Success) {
+                name = profileResult.data.firstName
+            }
 
             // Mock banners for now
             val banners = listOf("https://picsum.photos/800/400", "https://picsum.photos/800/401")
@@ -67,9 +99,52 @@ class HomeViewModel @Inject constructor(
                     isLoading = false,
                     collections = collections,
                     featuredProducts = featured,
+                    customerName = name,
+                    customerAvatarUrl = if (name.isNotEmpty()) "https://i.pravatar.cc/150?u=$name" else "https://i.pravatar.cc/150",
                     banners = banners,
                     error = error
                 )
+            }
+        }
+    }
+
+    private fun observeNotifications() {
+        viewModelScope.launch {
+            notificationRepository.getUnreadCount().collectLatest { count ->
+                _uiState.update { it.copy(unreadNotificationCount = count) }
+            }
+        }
+    }
+
+    private fun observeWishlist() {
+        viewModelScope.launch {
+            wishlistRepository.getWishlist().collectLatest { items ->
+                val ids = items.map { it.productId }.toSet()
+                _uiState.update { it.copy(wishlistedProductIds = ids) }
+            }
+        }
+    }
+
+    fun toggleWishlist(product: Product) {
+        viewModelScope.launch {
+            if (_uiState.value.wishlistedProductIds.contains(product.id)) {
+                removeFromWishlistUseCase(product.id)
+            } else {
+                addToWishlistUseCase(product)
+            }
+        }
+    }
+
+    fun addToCart(product: Product) {
+        viewModelScope.launch {
+            val defaultVariant = product.variants.firstOrNull() ?: return@launch
+            addToCartUseCase(product, defaultVariant, 1)
+
+            try {
+                scheduleAbandonedCartNotificationUseCase(product)
+            } catch (e: CancellationException) {
+                throw e
+            } catch (_: Exception) {
             }
         }
     }

@@ -1,6 +1,7 @@
 package com.shopflow.app.presentation.screens.orders
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -22,11 +23,14 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.shopflow.app.domain.model.Money
 import com.shopflow.app.domain.model.Order
 import com.shopflow.app.presentation.components.ChipSelector
+import com.shopflow.app.presentation.components.GlassmorphismCard
+import com.shopflow.app.presentation.components.StatusBadge
 import com.shopflow.app.presentation.theme.NeonMagenta
 import com.shopflow.app.presentation.theme.StatusProcessing
 import com.shopflow.app.presentation.theme.SurfaceGlass
 import com.shopflow.app.presentation.theme.TextSecondary
 import com.shopflow.app.presentation.theme.TrueBlack
+import com.shopflow.app.presentation.theme.ShopFlowTheme
 import java.text.NumberFormat
 import java.text.SimpleDateFormat
 import java.util.*
@@ -57,11 +61,11 @@ fun OrderHistoryScreen(
             verticalAlignment = Alignment.CenterVertically
         ) {
             IconButton(onClick = onNavigateBack) {
-                Icon(Icons.Default.ArrowBack, contentDescription = "Back", tint = Color.White)
+                Icon(Icons.Default.ArrowBack, contentDescription = "Back", tint = ShopFlowTheme.colors.textPrimary)
             }
             Text(
                 text = "Order History",
-                color = Color.White,
+                color = ShopFlowTheme.colors.textPrimary,
                 fontWeight = FontWeight.Bold,
                 fontSize = 20.sp,
                 modifier = Modifier.padding(start = 16.dp)
@@ -94,7 +98,7 @@ fun OrderHistoryScreen(
             }
         } else if (uiState.error != null) {
             Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                Text(uiState.error ?: "Error loading orders", color = Color.White)
+                Text(uiState.error ?: "Error loading orders", color = ShopFlowTheme.colors.textPrimary)
             }
         } else if (uiState.orders.isEmpty()) {
             Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
@@ -124,13 +128,12 @@ fun OrderCard(order: Order, onClick: () -> Unit) {
         order.processedAt
     }
 
-    Card(
-        onClick = onClick,
-        colors = CardDefaults.cardColors(containerColor = SurfaceGlass),
-        shape = RoundedCornerShape(16.dp),
-        modifier = Modifier.fillMaxWidth()
+    GlassmorphismCard(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable(onClick = onClick)
     ) {
-        Column(modifier = Modifier.padding(16.dp)) {
+        Column(modifier = Modifier.padding(4.dp)) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
@@ -138,13 +141,13 @@ fun OrderCard(order: Order, onClick: () -> Unit) {
             ) {
                 Text(
                     text = "Order #${order.orderNumber}",
-                    color = Color.White,
+                    color = ShopFlowTheme.colors.textPrimary,
                     fontWeight = FontWeight.Bold,
                     fontSize = 16.sp
                 )
                 Text(
                     text = dateStr,
-                    color = TextSecondary,
+                    color = ShopFlowTheme.colors.textSecondary,
                     fontSize = 14.sp
                 )
             }
@@ -156,29 +159,11 @@ fun OrderCard(order: Order, onClick: () -> Unit) {
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    val statusColor = when (order.fulfillmentStatus.name) {
-                        "DELIVERED" -> NeonMagenta
-                        "CANCELLED" -> Color.Red
-                        else -> StatusProcessing
-                    }
-                    Box(
-                        modifier = Modifier
-                            .size(8.dp)
-                            .background(statusColor, CircleShape)
-                    )
-                    Spacer(modifier = Modifier.width(8.dp))
-                    Text(
-                        text = order.fulfillmentStatus.name,
-                        color = statusColor,
-                        fontSize = 12.sp,
-                        fontWeight = FontWeight.Bold
-                    )
-                }
+                StatusBadge(status = order.fulfillmentStatus.name)
                 
                 Text(
                     text = order.totalPrice.format(),
-                    color = Color.White,
+                    color = ShopFlowTheme.colors.textPrimary,
                     fontWeight = FontWeight.Bold,
                     fontSize = 16.sp
                 )
@@ -186,3 +171,4 @@ fun OrderCard(order: Order, onClick: () -> Unit) {
         }
     }
 }
+

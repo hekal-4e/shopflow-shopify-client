@@ -10,13 +10,23 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
 import java.util.concurrent.TimeUnit
+import javax.inject.Qualifier
 import javax.inject.Singleton
+
+@Qualifier
+@Retention(AnnotationRetention.BINARY)
+annotation class ShopifyClient
+
+@Qualifier
+@Retention(AnnotationRetention.BINARY)
+annotation class WebhookClient
 
 @Module
 @InstallIn(SingletonComponent::class)
 object NetworkModule {
     @Provides
     @Singleton
+    @ShopifyClient
     fun provideOkHttpClient(
         authInterceptor: ShopifyAuthInterceptor
     ): OkHttpClient {
@@ -30,7 +40,18 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun provideApolloClient(okHttpClient: OkHttpClient): ApolloClient {
+    @WebhookClient
+    fun provideWebhookClient(): OkHttpClient {
+        return OkHttpClient.Builder()
+            .connectTimeout(30, TimeUnit.SECONDS)
+            .readTimeout(30, TimeUnit.SECONDS)
+            .writeTimeout(30, TimeUnit.SECONDS)
+            .build()
+    }
+
+    @Provides
+    @Singleton
+    fun provideApolloClient(@ShopifyClient okHttpClient: OkHttpClient): ApolloClient {
         val normalizedDomain = BuildConfig.SHOPIFY_STORE_DOMAIN
             .removePrefix("https://")
             .removePrefix("http://")

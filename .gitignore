@@ -9,8 +9,13 @@
 /captures/
 hs_err_pid*.log
 replay_pid*.log
-
+.agents
 app/local.properties
 app/secrets.properties
 local.properties
 secrets.properties
+.idea/
+.vscode/
+AGENTS.md
+.github/
+.opencode/

@@ -31,6 +31,7 @@ import com.shopflow.app.presentation.theme.SurfaceGlass
 import com.shopflow.app.presentation.theme.SurfaceGlassElevated
 import com.shopflow.app.presentation.theme.TextSecondary
 import com.shopflow.app.presentation.theme.TrueBlack
+import com.shopflow.app.presentation.theme.ShopFlowTheme
 import java.text.NumberFormat
 import java.util.Currency
 
@@ -61,11 +62,11 @@ fun CartScreen(
             verticalAlignment = Alignment.CenterVertically
         ) {
             IconButton(onClick = onNavigateBack) {
-                Icon(Icons.Default.ArrowBack, contentDescription = "Back", tint = Color.White)
+                Icon(Icons.Default.ArrowBack, contentDescription = "Back", tint = ShopFlowTheme.colors.textPrimary)
             }
             Text(
                 text = "Shopping Cart",
-                color = Color.White,
+                color = ShopFlowTheme.colors.textPrimary,
                 fontWeight = FontWeight.Bold,
                 fontSize = 20.sp,
                 modifier = Modifier.padding(start = 16.dp)
@@ -113,7 +114,7 @@ fun CartScreen(
                         Column(modifier = Modifier.weight(1f)) {
                             Text(
                                 text = item.product.title,
-                                color = Color.White,
+                                color = ShopFlowTheme.colors.textPrimary,
                                 fontWeight = FontWeight.Bold,
                                 fontSize = 16.sp,
                                 maxLines = 1
@@ -166,7 +167,7 @@ fun CartScreen(
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Text("Subtotal", color = TextSecondary, fontSize = 14.sp)
-                Text(cart!!.subtotal.format(), color = Color.White, fontSize = 14.sp)
+                Text(cart!!.subtotal.format(), color = ShopFlowTheme.colors.textPrimary, fontSize = 14.sp)
             }
             Spacer(modifier = Modifier.height(8.dp))
             Row(
@@ -174,7 +175,7 @@ fun CartScreen(
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Text("Taxes & Fees", color = TextSecondary, fontSize = 14.sp)
-                Text("Calculated at checkout", color = Color.White, fontSize = 14.sp)
+                Text("Calculated at checkout", color = ShopFlowTheme.colors.textPrimary, fontSize = 14.sp)
             }
             Spacer(modifier = Modifier.height(16.dp))
             Divider(color = SurfaceGlassElevated)
@@ -184,7 +185,7 @@ fun CartScreen(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Text("Total", color = Color.White, fontWeight = FontWeight.Bold, fontSize = 18.sp)
+                Text("Total", color = ShopFlowTheme.colors.textPrimary, fontWeight = FontWeight.Bold, fontSize = 18.sp)
                 Text(cart!!.subtotal.format(), color = NeonMagenta, fontWeight = FontWeight.Bold, fontSize = 20.sp)
             }
 
@@ -198,3 +199,4 @@ fun CartScreen(
         }
     }
 }
+

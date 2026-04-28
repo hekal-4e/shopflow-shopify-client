@@ -25,6 +25,7 @@ import com.shopflow.app.presentation.theme.NeonMagenta
 import com.shopflow.app.presentation.theme.SurfaceGlass
 import com.shopflow.app.presentation.theme.TextSecondary
 import com.shopflow.app.presentation.theme.TrueBlack
+import com.shopflow.app.presentation.theme.ShopFlowTheme
 
 @Composable
 fun OrderConfirmationScreen(
@@ -45,7 +46,7 @@ fun OrderConfirmationScreen(
             CircularProgressIndicator(color = NeonMagenta)
         } else if (uiState.error != null) {
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                Text(uiState.error ?: "Failed to load order", color = Color.White)
+                Text(uiState.error ?: "Failed to load order", color = ShopFlowTheme.colors.textPrimary)
                 Spacer(modifier = Modifier.height(16.dp))
                 GradientButton(text = "Go Back Home", onClick = onContinueShopping)
             }
@@ -73,7 +74,7 @@ fun OrderConfirmationScreen(
 
                 Text(
                     text = "Order Confirmed!",
-                    color = Color.White,
+                    color = ShopFlowTheme.colors.textPrimary,
                     fontWeight = FontWeight.Bold,
                     fontSize = 28.sp
                 )
@@ -98,3 +99,4 @@ fun OrderConfirmationScreen(
         }
     }
 }
+

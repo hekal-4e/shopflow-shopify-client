@@ -48,22 +48,25 @@ import kotlinx.coroutines.delay
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.shopflow.app.presentation.screens.onboarding.OnboardingViewModel
+import com.shopflow.app.presentation.screens.splash.SplashViewModel
 
 @Composable
 fun SplashScreen(
     onGetStarted: () -> Unit,
     onSignIn: () -> Unit,
     onAutoNavigateHome: () -> Unit,
-    viewModel: OnboardingViewModel = hiltViewModel()
+    viewModel: SplashViewModel = hiltViewModel()
 ) {
     val context = LocalContext.current
-    val hasCompletedOnboarding by viewModel.hasCompletedOnboarding.collectAsState()
+    val decision by viewModel.decision.collectAsState()
 
-    LaunchedEffect(hasCompletedOnboarding) {
-        if (hasCompletedOnboarding) {
-            delay(2500)
-            onAutoNavigateHome()
+    LaunchedEffect(decision) {
+        if (!decision.isReady) return@LaunchedEffect
+        delay(2500)
+        when {
+            !decision.hasCompletedOnboarding -> onGetStarted()
+            !decision.isAuthenticated -> onSignIn()
+            else -> onAutoNavigateHome()
         }
     }
 
@@ -105,7 +108,7 @@ fun SplashScreen(
                     Icon(
                         imageVector = Icons.Default.AutoAwesome,
                         contentDescription = null,
-                        tint = Color.White,
+                        tint = ShopFlowTheme.colors.textPrimary,
                         modifier = Modifier.size(28.dp)
                     )
                 }
@@ -114,7 +117,7 @@ fun SplashScreen(
 
                 Text(
                     text = buildAnnotatedString {
-                        withStyle(SpanStyle(color = Color.White, fontWeight = FontWeight.Bold)) {
+                        withStyle(SpanStyle(color = ShopFlowTheme.colors.textPrimary, fontWeight = FontWeight.Bold)) {
                             append("Shop")
                         }
                         withStyle(
@@ -208,14 +211,14 @@ private fun GradientButton(
     ) {
         Text(
             text = text,
-            color = Color.White,
+            color = ShopFlowTheme.colors.textPrimary,
             fontWeight = FontWeight.Bold
         )
         Spacer(modifier = Modifier.size(8.dp))
         Icon(
             imageVector = Icons.Default.ArrowForward,
             contentDescription = null,
-            tint = Color.White
+            tint = ShopFlowTheme.colors.textPrimary
         )
     }
 }
