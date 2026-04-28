@@ -1,8 +1,7 @@
 package com.shopflow.app.di
 
 import android.content.Context
-import androidx.datastore.core.DataStore
-import androidx.datastore.preferences.core.Preferences
+import com.shopflow.app.data.local.datastore.CartDataStore
 import com.shopflow.app.data.local.datastore.PreferencesDataStore
 import com.shopflow.app.data.local.datastore.TokenDataStore
 import dagger.Module
@@ -29,5 +28,13 @@ object DataStoreModule {
         @ApplicationContext context: Context
     ): TokenDataStore {
         return TokenDataStore(context)
+    }
+
+    @Provides
+    @Singleton
+    fun provideCartDataStore(
+        @ApplicationContext context: Context
+    ): CartDataStore {
+        return CartDataStore(context)
     }
 }

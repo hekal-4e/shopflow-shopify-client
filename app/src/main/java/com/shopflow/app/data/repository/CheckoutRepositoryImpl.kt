@@ -20,9 +20,13 @@ class CheckoutRepositoryImpl @Inject constructor(
                 lineItems = lineItems.map { ApolloCheckoutLineItemInput(it.variantId, it.quantity) }
             )
             val response = dataSource.checkoutCreate(input)
-            val webUrl = response.data?.checkoutCreate?.checkout?.webUrl
+            val checkoutPayload = response.data?.checkoutCreate
+            val webUrl = checkoutPayload?.checkout?.webUrl
+            val checkoutUserErrors = checkoutPayload?.checkoutUserErrors
+                ?.mapNotNull { it.message.takeIf(String::isNotBlank) }
             when {
                 webUrl != null -> ApiResult.Success(webUrl)
+                !checkoutUserErrors.isNullOrEmpty() -> ApiResult.GraphQLError(checkoutUserErrors)
                 response.errors?.isNotEmpty() == true -> ApiResult.GraphQLError(response.errors!!.map { it.message })
                 else -> ApiResult.Empty
             }

@@ -1,5 +1,6 @@
 package com.shopflow.app.presentation.screens.checkout
 
+import android.content.ActivityNotFoundException
 import android.net.Uri
 import android.content.Intent
 import androidx.compose.foundation.background
@@ -13,7 +14,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.shopflow.app.presentation.theme.NeonMagenta
@@ -35,10 +35,20 @@ fun CheckoutScreen(
     LaunchedEffect(uiState.checkoutUrl) {
         val url = uiState.checkoutUrl
         if (url != null) {
-            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
-            context.startActivity(intent)
-            viewModel.onCheckoutUrlHandled()
-            onNavigateBack() // Pop back to cart when leaving
+            try {
+                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url)).apply {
+                    addCategory(Intent.CATEGORY_BROWSABLE)
+                }
+                context.startActivity(intent)
+                viewModel.onCheckoutUrlHandled()
+                onNavigateBack()
+            } catch (_: ActivityNotFoundException) {
+                viewModel.onCheckoutLaunchFailed("No browser app found to open checkout.")
+            } catch (e: Exception) {
+                viewModel.onCheckoutLaunchFailed(
+                    e.message ?: "Could not open checkout. Please try again."
+                )
+            }
         }
     }
 

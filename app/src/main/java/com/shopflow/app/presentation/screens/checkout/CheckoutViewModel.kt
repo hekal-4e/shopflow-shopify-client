@@ -33,7 +33,7 @@ class CheckoutViewModel @Inject constructor(
     fun createCheckout() {
         viewModelScope.launch {
             _uiState.update { it.copy(isCreatingCheckout = true, error = null) }
-            
+
             val cart = getCartUseCase().firstOrNull()
             if (cart == null || cart.lineItems.isEmpty()) {
                 _uiState.update { it.copy(isCreatingCheckout = false, error = "Cart is empty") }
@@ -43,19 +43,40 @@ class CheckoutViewModel @Inject constructor(
             val inputList = cart.lineItems.map {
                 CheckoutLineItemInput(variantId = it.variant.id, quantity = it.quantity)
             }
+            if (inputList.any { it.variantId.isBlank() || it.quantity <= 0 }) {
+                _uiState.update {
+                    it.copy(
+                        isCreatingCheckout = false,
+                        error = "Invalid cart items. Please remove and re-add products."
+                    )
+                }
+                return@launch
+            }
 
             when (val result = createCheckoutUseCase(inputList)) {
                 is ApiResult.Success -> {
                     _uiState.update { it.copy(isCreatingCheckout = false, checkoutUrl = result.data) }
                 }
                 is ApiResult.NetworkError -> {
-                    _uiState.update { it.copy(isCreatingCheckout = false, error = result.exception.message) }
+                    _uiState.update {
+                        it.copy(
+                            isCreatingCheckout = false,
+                            error = result.exception.message ?: "Network error while creating checkout."
+                        )
+                    }
                 }
                 is ApiResult.GraphQLError -> {
-                    _uiState.update { it.copy(isCreatingCheckout = false, error = "Failed to create checkout") }
+                    val bestError = result.errors.firstOrNull { it.isNotBlank() }
+                        ?: "Failed to create checkout."
+                    _uiState.update { it.copy(isCreatingCheckout = false, error = bestError) }
                 }
                 is ApiResult.Empty -> {
-                    _uiState.update { it.copy(isCreatingCheckout = false, error = "Unknown error") }
+                    _uiState.update {
+                        it.copy(
+                            isCreatingCheckout = false,
+                            error = "Checkout could not be created. Try again."
+                        )
+                    }
                 }
             }
         }
@@ -63,5 +84,9 @@ class CheckoutViewModel @Inject constructor(
 
     fun onCheckoutUrlHandled() {
         _uiState.update { it.copy(checkoutUrl = null) }
+    }
+
+    fun onCheckoutLaunchFailed(message: String) {
+        _uiState.update { it.copy(checkoutUrl = null, error = message) }
     }
 }

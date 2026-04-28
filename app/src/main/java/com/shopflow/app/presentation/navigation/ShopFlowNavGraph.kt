@@ -106,7 +106,8 @@ fun ShopFlowNavGraph(
             composable(Route.Onboarding.route) {
                 OnboardingScreen(
                     onFinish = {
-                        navController.navigate(Route.Home.route) {
+                        val nextRoute = if (isAuthenticated) Route.Home.route else Route.Login.route
+                        navController.navigate(nextRoute) {
                             popUpTo(Route.Onboarding.route) { inclusive = true }
                         }
                     }
@@ -167,13 +168,22 @@ fun ShopFlowNavGraph(
             composable(Route.Cart.route) {
                 CartScreen(
                     onNavigateBack = { navController.popBackStack() },
-                    onProceedToCheckout = { navController.navigate(Route.Checkout.route) }
+                    onProceedToCheckout = {
+                        if (isAuthenticated) {
+                            navController.navigate(Route.Checkout.route)
+                        } else {
+                            navController.navigate(Route.Login.route)
+                        }
+                    }
                 )
             }
             composable(Route.Checkout.route) {
                 LaunchedEffect(isAuthenticated) {
                     if (!isAuthenticated) {
-                        navController.navigate(Route.Login.route)
+                        navController.navigate(Route.Login.route) {
+                            popUpTo(Route.Checkout.route) { inclusive = true }
+                            launchSingleTop = true
+                        }
                     }
                 }
                 if (isAuthenticated) {

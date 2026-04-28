@@ -13,6 +13,7 @@ import com.shopflow.app.type.CustomerCreateInput
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.collect
@@ -32,8 +33,16 @@ class AuthRepositoryImpl @Inject constructor(
 
     init {
         repositoryScope.launch {
-            tokenDataStore.accessTokenFlow.collect { storedToken ->
-                authState.value = !storedToken.isNullOrBlank()
+            combine(
+                tokenDataStore.accessTokenFlow,
+                tokenDataStore.expiryTimestampFlow
+            ) { storedToken, expiryTimestamp ->
+                storedToken to expiryTimestamp
+            }.collect { (storedToken, expiryTimestamp) ->
+                val now = Instant.now().toEpochMilli()
+                val isValidToken = !storedToken.isNullOrBlank() && expiryTimestamp > now
+                authState.value = isValidToken
+                accessToken = if (isValidToken) storedToken else null
             }
         }
     }
