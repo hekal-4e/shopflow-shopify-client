@@ -32,7 +32,7 @@ fun FetchCustomerProfileQuery.Data.toDomainCustomer(): Customer? {
         id = customerNode.id,
         firstName = customerNode.firstName.orEmpty(),
         lastName = customerNode.lastName.orEmpty(),
-        email = customerNode.email,
+        email = customerNode.email ?: "",
         phone = customerNode.phone,
         defaultAddress = customerNode.defaultAddress?.let {
             mapAddress(it.id, it.address1, it.address2, it.city, it.province, it.country, it.zip)
@@ -49,7 +49,7 @@ fun CustomerRegisterMutation.Customer.toDomainCustomer(): Customer {
         id = id,
         firstName = firstName.orEmpty(),
         lastName = lastName.orEmpty(),
-        email = email
+        email = email ?: ""
     )
 }
 

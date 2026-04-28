@@ -11,7 +11,7 @@ import com.shopflow.app.domain.model.ProductImage
 import com.shopflow.app.domain.model.ProductVariant
 import com.shopflow.app.domain.model.SelectedOption
 
-private fun String.toAmount(): Double = toDoubleOrNull() ?: 0.0
+private fun Any.toAmount(): Double = this.toString().toDoubleOrNull() ?: 0.0
 
 fun FetchFeaturedProductsQuery.Data.toDomainProducts(): List<Product> {
     return products.edges.map { edge ->
@@ -25,7 +25,7 @@ fun FetchFeaturedProductsQuery.Data.toDomainProducts(): List<Product> {
             productType = node.productType,
             images = node.images.edges.map { imageEdge ->
                 ProductImage(
-                    url = imageEdge.node.url,
+                    url = imageEdge.node.url.toString(),
                     altText = imageEdge.node.altText,
                     width = imageEdge.node.width,
                     height = imageEdge.node.height
@@ -38,26 +38,36 @@ fun FetchFeaturedProductsQuery.Data.toDomainProducts(): List<Product> {
                     title = variant.title,
                     price = Money(
                         amount = variant.price.amount.toAmount(),
-                        currencyCode = variant.price.currencyCode
+                        currencyCode = variant.price.currencyCode.name
                     ),
                     compareAtPrice = variant.compareAtPrice?.let {
-                        Money(it.amount.toAmount(), it.currencyCode)
-                    },
-                    selectedOptions = variant.selectedOptions.map {
-                        SelectedOption(name = it.name, value = it.value)
+                        Money(
+                            amount = it.amount.toAmount(),
+                            currencyCode = it.currencyCode.name
+                        )
                     },
                     isAvailable = variant.availableForSale,
-                    image = variant.image?.let { ProductImage(url = it.url, altText = it.altText) }
+                    image = variant.image?.let {
+                        ProductImage(
+                            url = it.url.toString(),
+                            altText = it.altText,
+                            width = null,
+                            height = null
+                        )
+                    },
+                    selectedOptions = variant.selectedOptions.map { option ->
+                        SelectedOption(name = option.name, value = option.value)
+                    }
                 )
             },
             priceRange = PriceRange(
                 minPrice = Money(
                     amount = node.priceRange.minVariantPrice.amount.toAmount(),
-                    currencyCode = node.priceRange.minVariantPrice.currencyCode
+                    currencyCode = node.priceRange.minVariantPrice.currencyCode.name
                 ),
                 maxPrice = Money(
                     amount = node.priceRange.maxVariantPrice.amount.toAmount(),
-                    currencyCode = node.priceRange.maxVariantPrice.currencyCode
+                    currencyCode = node.priceRange.maxVariantPrice.currencyCode.name
                 )
             ),
             isAvailable = node.availableForSale
@@ -78,14 +88,17 @@ fun FetchProductsByCollectionQuery.Data.toDomainProducts(): List<Product> {
             brand = node.vendor,
             productType = node.productType,
             images = node.images.edges.map { imageEdge ->
-                ProductImage(url = imageEdge.node.url, altText = imageEdge.node.altText)
+                ProductImage(url = imageEdge.node.url.toString(), altText = imageEdge.node.altText)
             },
             variants = node.variants.edges.map { variantEdge ->
                 val variant = variantEdge.node
                 ProductVariant(
                     id = variant.id,
                     title = variant.title,
-                    price = Money(variant.price.amount.toAmount(), variant.price.currencyCode),
+                    price = Money(
+                        variant.price.amount.toAmount(),
+                        variant.price.currencyCode.name
+                    ),
                     selectedOptions = variant.selectedOptions.map {
                         SelectedOption(it.name, it.value)
                     },
@@ -93,8 +106,8 @@ fun FetchProductsByCollectionQuery.Data.toDomainProducts(): List<Product> {
                 )
             },
             priceRange = PriceRange(
-                minPrice = Money(min.amount.toAmount(), min.currencyCode),
-                maxPrice = Money(min.amount.toAmount(), min.currencyCode)
+                minPrice = Money(min.amount.toAmount(), min.currencyCode.name),
+                maxPrice = Money(min.amount.toAmount(), min.currencyCode.name)
             ),
             isAvailable = node.availableForSale
         )
@@ -112,11 +125,11 @@ fun SearchProductsQuery.Data.toDomainProducts(): List<Product> {
             descriptionHtml = "",
             brand = node.vendor,
             productType = node.productType,
-            images = node.images.edges.map { ProductImage(it.node.url, it.node.altText) },
+            images = node.images.edges.map { ProductImage(it.node.url.toString(), it.node.altText) },
             variants = emptyList(),
             priceRange = PriceRange(
-                minPrice = Money(min.amount.toAmount(), min.currencyCode),
-                maxPrice = Money(min.amount.toAmount(), min.currencyCode)
+                minPrice = Money(min.amount.toAmount(), min.currencyCode.name),
+                maxPrice = Money(min.amount.toAmount(), min.currencyCode.name)
             ),
             isAvailable = node.availableForSale
         )
@@ -129,41 +142,54 @@ fun FetchProductDetailQuery.Data.toDomainProduct(): Product? {
         id = node.id,
         title = node.title,
         description = node.description,
-        descriptionHtml = node.descriptionHtml,
+        descriptionHtml = node.descriptionHtml.toString(),
         brand = node.vendor,
         productType = node.productType,
-        images = node.images.edges.map {
+        images = node.images.edges.map { imageEdge ->
             ProductImage(
-                url = it.node.url,
-                altText = it.node.altText,
-                width = it.node.width,
-                height = it.node.height
+                url = imageEdge.node.url.toString(),
+                altText = imageEdge.node.altText,
+                width = imageEdge.node.width,
+                height = imageEdge.node.height
             )
         },
-        variants = node.variants.edges.map { variantEdge ->
+        variants = product.variants.edges.map { variantEdge ->
             val variant = variantEdge.node
             ProductVariant(
                 id = variant.id,
                 title = variant.title,
-                price = Money(variant.price.amount.toAmount(), variant.price.currencyCode),
+                price = Money(
+                    amount = variant.price.amount.toAmount(),
+                    currencyCode = variant.price.currencyCode.name
+                ),
                 compareAtPrice = variant.compareAtPrice?.let {
-                    Money(it.amount.toAmount(), it.currencyCode)
+                    Money(
+                        amount = it.amount.toAmount(),
+                        currencyCode = it.currencyCode.name
+                    )
+                },
+                isAvailable = variant.availableForSale,
+                image = variant.image?.let {
+                    ProductImage(
+                        url = it.url.toString(),
+                        altText = it.altText,
+                        width = null,
+                        height = null
+                    )
                 },
                 selectedOptions = variant.selectedOptions.map {
                     SelectedOption(it.name, it.value)
-                },
-                isAvailable = variant.availableForSale,
-                image = variant.image?.let { ProductImage(it.url, it.altText) }
+                }
             )
         },
         priceRange = PriceRange(
             minPrice = Money(
                 node.priceRange.minVariantPrice.amount.toAmount(),
-                node.priceRange.minVariantPrice.currencyCode
+                node.priceRange.minVariantPrice.currencyCode.name
             ),
             maxPrice = Money(
                 node.priceRange.maxVariantPrice.amount.toAmount(),
-                node.priceRange.maxVariantPrice.currencyCode
+                node.priceRange.maxVariantPrice.currencyCode.name
             )
         ),
         isAvailable = node.availableForSale

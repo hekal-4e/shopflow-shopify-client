@@ -52,6 +52,7 @@ private fun Money.format(): String {
 fun HomeScreen(
     onNavigateToProductDetail: (String) -> Unit,
     onNavigateToNotifications: () -> Unit,
+    onNavigateToProfile: () -> Unit,
     viewModel: HomeViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
@@ -75,7 +76,10 @@ fun HomeScreen(
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Row(verticalAlignment = Alignment.CenterVertically) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.clickable(onClick = onNavigateToProfile)
+            ) {
                 // Avatar
                 Box(
                     modifier = Modifier

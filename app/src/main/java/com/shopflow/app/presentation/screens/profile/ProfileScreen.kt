@@ -9,6 +9,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ChevronRight
+import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Divider
@@ -38,6 +39,8 @@ fun ProfileScreen(
     onNavigateToSettings: () -> Unit,
     onNavigateToOrders: () -> Unit,
     onNavigateToWishlist: () -> Unit,
+    onNavigateToLogin: () -> Unit,
+    onNavigateToRegister: () -> Unit,
     viewModel: ProfileViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
@@ -109,6 +112,59 @@ fun ProfileScreen(
                 ) {
                     Text("PREMIUM MEMBER", color = NeonMagenta, fontWeight = FontWeight.Bold, fontSize = 10.sp)
                 }
+            }
+        } else {
+            // Guest State
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(24.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Box(
+                    modifier = Modifier
+                        .size(100.dp)
+                        .clip(CircleShape)
+                        .background(SurfaceGlass),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Icon(
+                        androidx.compose.material.icons.Icons.Default.Person,
+                        contentDescription = null,
+                        modifier = Modifier.size(48.dp),
+                        tint = TextSecondary
+                    )
+                }
+
+                Spacer(modifier = Modifier.height(24.dp))
+
+                Text(
+                    text = "Join ShopFlow",
+                    color = ShopFlowTheme.colors.textPrimary,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 20.sp
+                )
+                Text(
+                    text = "Sign in to track orders and save your wishlist",
+                    color = TextSecondary,
+                    fontSize = 14.sp,
+                    textAlign = androidx.compose.ui.text.style.TextAlign.Center,
+                    modifier = Modifier.padding(top = 8.dp, bottom = 32.dp)
+                )
+
+                com.shopflow.app.presentation.components.GradientButton(
+                    text = "Sign In",
+                    onClick = onNavigateToLogin,
+                    modifier = Modifier.fillMaxWidth()
+                )
+                
+                Spacer(modifier = Modifier.height(12.dp))
+                
+                com.shopflow.app.presentation.components.OutlinedButton(
+                    text = "Create Account",
+                    onClick = onNavigateToRegister,
+                    modifier = Modifier.fillMaxWidth()
+                )
             }
         }
 

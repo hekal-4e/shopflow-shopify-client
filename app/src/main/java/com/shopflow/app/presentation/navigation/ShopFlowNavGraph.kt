@@ -145,6 +145,9 @@ fun ShopFlowNavGraph(
                     },
                     onNavigateToNotifications = {
                         navController.navigate(Route.Notifications.route)
+                    },
+                    onNavigateToProfile = {
+                        navController.navigate(Route.Profile.route)
                     }
                 )
             }
@@ -155,6 +158,9 @@ fun ShopFlowNavGraph(
                     },
                     onNavigateToNotifications = {
                         navController.navigate(Route.Notifications.route)
+                    },
+                    onNavigateToProfile = {
+                        navController.navigate(Route.Profile.route)
                     }
                 )
             }
@@ -214,7 +220,9 @@ fun ShopFlowNavGraph(
                 ProfileScreen(
                     onNavigateToSettings = { navController.navigate(Route.Settings.route) },
                     onNavigateToOrders = { navController.navigate(Route.OrderHistory.route) },
-                    onNavigateToWishlist = { navController.navigate(Route.Wishlist.route) }
+                    onNavigateToWishlist = { navController.navigate(Route.Wishlist.route) },
+                    onNavigateToLogin = { navController.navigate(Route.Login.route) },
+                    onNavigateToRegister = { navController.navigate(Route.Register.route) }
                 )
             }
             composable(Route.OrderHistory.route) {

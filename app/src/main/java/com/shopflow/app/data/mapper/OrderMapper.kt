@@ -7,10 +7,11 @@ import com.shopflow.app.domain.model.Money
 import com.shopflow.app.domain.model.Order
 import com.shopflow.app.domain.model.OrderLineItem
 import com.shopflow.app.domain.model.ProductImage
+import com.shopflow.app.type.OrderFulfillmentStatus
 
-private fun String.toAmount(): Double = toDoubleOrNull() ?: 0.0
+private fun Any.toAmount(): Double = this.toString().toDoubleOrNull() ?: 0.0
 
-private fun mapStatus(status: com.shopflow.app.type.FulfillmentStatus?): FulfillmentStatus {
+private fun mapStatus(status: OrderFulfillmentStatus?): FulfillmentStatus {
     return when (status?.name) {
         FulfillmentStatus.PROCESSING.name -> FulfillmentStatus.PROCESSING
         FulfillmentStatus.SHIPPED.name -> FulfillmentStatus.SHIPPED
@@ -28,11 +29,11 @@ fun FetchCustomerOrdersQuery.Data.toDomainOrders(): List<Order> {
             id = node.id,
             orderNumber = node.orderNumber,
             name = node.name,
-            processedAt = node.processedAt,
+            processedAt = node.processedAt.toString(),
             fulfillmentStatus = mapStatus(node.fulfillmentStatus),
             totalPrice = Money(
                 amount = node.totalPrice.amount.toAmount(),
-                currencyCode = node.totalPrice.currencyCode
+                currencyCode = node.totalPrice.currencyCode.name
             ),
             lineItems = node.lineItems.edges.map { itemEdge ->
                 val item = itemEdge.node
@@ -42,10 +43,10 @@ fun FetchCustomerOrdersQuery.Data.toDomainOrders(): List<Order> {
                     quantity = item.quantity,
                     price = Money(
                         amount = item.variant?.price?.amount?.toAmount() ?: 0.0,
-                        currencyCode = item.variant?.price?.currencyCode.orEmpty()
+                        currencyCode = item.variant?.price?.currencyCode?.name.orEmpty()
                     ),
                     image = item.variant?.image?.let {
-                        ProductImage(url = it.url, altText = it.altText)
+                        ProductImage(url = it.url.toString(), altText = it.altText)
                     }
                 )
             },

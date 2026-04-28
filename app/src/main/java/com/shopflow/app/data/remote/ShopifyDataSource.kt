@@ -3,11 +3,11 @@ package com.shopflow.app.data.remote
 import com.apollographql.apollo3.ApolloClient
 import com.apollographql.apollo3.api.ApolloResponse
 import com.apollographql.apollo3.api.Optional
-import com.shopflow.app.CheckoutCreateMutation
 import com.shopflow.app.CustomerAccessTokenRenewMutation
 import com.shopflow.app.CustomerLoginMutation
 import com.shopflow.app.CustomerRegisterMutation
 import com.shopflow.app.CustomerUpdateMutation
+import com.shopflow.app.CartCreateMutation
 import com.shopflow.app.FetchCollectionsQuery
 import com.shopflow.app.FetchCustomerOrdersQuery
 import com.shopflow.app.FetchCustomerProfileQuery
@@ -15,7 +15,7 @@ import com.shopflow.app.FetchFeaturedProductsQuery
 import com.shopflow.app.FetchProductDetailQuery
 import com.shopflow.app.FetchProductsByCollectionQuery
 import com.shopflow.app.SearchProductsQuery
-import com.shopflow.app.type.CheckoutCreateInput
+import com.shopflow.app.type.CartInput
 import com.shopflow.app.type.CustomerAccessTokenCreateInput
 import com.shopflow.app.type.CustomerCreateInput
 import com.shopflow.app.type.CustomerUpdateInput
@@ -97,8 +97,8 @@ class ShopifyDataSource @Inject constructor(
         ).execute()
     }
 
-    suspend fun checkoutCreate(input: CheckoutCreateInput): ApolloResponse<CheckoutCreateMutation.Data> {
-        return apolloClient.mutation(CheckoutCreateMutation(input = input)).execute()
+    suspend fun cartCreate(input: CartInput): ApolloResponse<CartCreateMutation.Data> {
+        return apolloClient.mutation(CartCreateMutation(input = input)).execute()
     }
 
     suspend fun customerAccessTokenRenew(accessToken: String): ApolloResponse<CustomerAccessTokenRenewMutation.Data> {

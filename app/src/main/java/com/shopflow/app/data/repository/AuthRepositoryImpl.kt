@@ -16,7 +16,6 @@ import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import java.time.Instant
 import javax.inject.Inject
@@ -56,7 +55,7 @@ class AuthRepositoryImpl @Inject constructor(
             val token = tokenPayload?.accessToken
             when {
                 token != null -> {
-                    val expiryTimestamp = parseExpiryTimestamp(tokenPayload.expiresAt)
+                    val expiryTimestamp = parseExpiryTimestamp(tokenPayload.expiresAt.toString())
                     accessToken = token
                     authState.value = true
                     tokenDataStore.storeToken(token, expiryTimestamp)
@@ -102,7 +101,7 @@ class AuthRepositoryImpl @Inject constructor(
                         id = customer.id,
                         firstName = customer.firstName.orEmpty(),
                         lastName = customer.lastName.orEmpty(),
-                        email = customer.email
+                        email = customer.email.orEmpty()
                     )
                 )
                 response.errors?.isNotEmpty() == true -> ApiResult.GraphQLError(response.errors!!.map { it.message })
@@ -120,7 +119,7 @@ class AuthRepositoryImpl @Inject constructor(
             val renewed = tokenPayload?.accessToken
             when {
                 renewed != null -> {
-                    val expiryTimestamp = parseExpiryTimestamp(tokenPayload.expiresAt)
+                    val expiryTimestamp = parseExpiryTimestamp(tokenPayload.expiresAt.toString())
                     this.accessToken = renewed
                     authState.value = true
                     tokenDataStore.storeToken(renewed, expiryTimestamp)

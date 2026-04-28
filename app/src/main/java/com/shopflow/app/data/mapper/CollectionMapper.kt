@@ -13,7 +13,7 @@ fun FetchCollectionsQuery.Data.toDomainCollections(): List<Collection> {
             description = node.description,
             image = node.image?.let {
                 ProductImage(
-                    url = it.url,
+                    url = it.url.toString(),
                     altText = it.altText,
                     width = it.width,
                     height = it.height

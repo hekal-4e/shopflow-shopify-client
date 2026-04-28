@@ -62,10 +62,13 @@ fun SplashScreen(
 
     LaunchedEffect(decision) {
         if (!decision.isReady) return@LaunchedEffect
+        
+        // Wait for the splash animation/delay
         delay(2500)
+        
         when {
             !decision.hasCompletedOnboarding -> onGetStarted()
-            !decision.isAuthenticated -> onSignIn()
+            // We allow guests to browse the Home screen directly as per spec
             else -> onAutoNavigateHome()
         }
     }
