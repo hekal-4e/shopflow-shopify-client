@@ -10,6 +10,8 @@ plugins {
     alias(libs.plugins.room)
 }
 
+
+
 val secretsProperties = Properties().apply {
     val secretsFile = rootProject.file("secrets.properties")
     if (secretsFile.exists()) {
@@ -104,6 +106,7 @@ dependencies {
     implementation(libs.androidx.work.runtime.ktx)
     implementation(libs.kotlinx.coroutines.android)
     implementation(libs.okhttp)
+    implementation(libs.gson)
     testImplementation(libs.junit4)
     testImplementation(libs.junit5.api)
     testRuntimeOnly(libs.junit5.engine)
